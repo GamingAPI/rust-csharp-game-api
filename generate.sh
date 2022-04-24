@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -e
 
 library_last_version="0.0.0"
 template_last_version="0.0.0"
