@@ -9,7 +9,7 @@ on:
     types:
       - webhook
 jobs:
-  auto-update-:
+  update-generated-library:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
