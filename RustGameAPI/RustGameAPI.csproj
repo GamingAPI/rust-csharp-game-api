@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net461</TargetFrameworks>
     <RootNamespace>Asyncapi.Nats.Client</RootNamespace>
     <Version>0.0.0</Version>
     <PackageVersion>0.0.0</PackageVersion>
