@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
       - name: 'Automated Version Bump'
-        uses: 'jonaslagoni/gh-action-dotnet-bump@master'
+        uses: 'jonaslagoni/gh-action-dotnet-bump@main'
         id: version_bump
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
