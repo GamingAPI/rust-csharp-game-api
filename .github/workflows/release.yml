@@ -33,6 +33,7 @@ jobs:
           skip-tag: 'true'
           skip-commit: 'true'
           path-to-file: './RustGameAPI/RustGameAPI.csproj'
+          release-commit-message-regex: 'chore\(release\): v{{version}}'
       - if: steps.version_bump.outputs.wasBumped == 'true' 
         run: dotnet build --configuration Release RustGameAPI
       - if: steps.version_bump.outputs.wasBumped == 'true' 
