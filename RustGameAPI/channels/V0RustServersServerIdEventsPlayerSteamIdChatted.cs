@@ -9,47 +9,23 @@ namespace Asyncapi.Nats.Client.Channels
   class V0RustServersServerIdEventsPlayerSteamIdChatted
   {
 
-  internal static ChatMessage JsonDeserializerSupport(LoggingInterface logger, byte[] buffer)
+
+internal static byte[] JsonSerializerSupport(LoggingInterface logger, ChatMessage obj)
 {
-  var srt = Encoding.UTF8.GetString(buffer);
-  logger.Debug("Deserializing message " + srt);
-  return JsonSerializer.Deserialize<ChatMessage>(srt);
+  var json = JsonSerializer.Serialize(obj);
+  logger.Debug("Serialized message " + json);
+  return Encoding.UTF8.GetBytes(json);
 }
-  public static IAsyncSubscription Subscribe(
-    LoggingInterface logger,
+
+public static void Publish(
+  LoggingInterface logger,
 IEncodedConnection connection,
-V0RustServersServerIdEventsPlayerSteamIdChattedOnRequest onRequest,
+ChatMessage requestMessage,
 String server_id,String steam_id
-  )
-  {
-    EventHandler<EncodedMessageEventArgs> handler = (sender, args) =>
-    {
-      logger.Debug("Got message for channel subscription: " + $"v0.rust.servers.{server_id}.events.player.{steam_id}.chatted");
-      var deserializedMessage = JsonDeserializerSupport(logger, (byte[])args.ReceivedObject);
-
-      var unmodifiedChannel = "v0.rust.servers.{server_id}.events.player.{steam_id}.chatted";
-  var channel = args.Subject;
-  var serverIdSplit = unmodifiedChannel.Split(new string[] { "{server_id}" }, StringSplitOptions.None);
-var steamIdSplit = serverIdSplit[1].Split(new string[] { "{steam_id}" }, StringSplitOptions.None);
-  String[] splits = {
-    serverIdSplit[0],
-steamIdSplit[0],
-steamIdSplit[1]
-  };
-  channel = channel.Substring(splits[0].Length);
-var serverIdEnd = channel.IndexOf(splits[1]);
-var serverIdParam = $"{channel.Substring(0, serverIdEnd)}";
-channel = channel.Substring(serverIdEnd+splits[1].Length);
-var steamIdEnd = channel.IndexOf(splits[2]);
-var steamIdParam = $"{channel.Substring(0, steamIdEnd)}";
-      
-      onRequest(deserializedMessage,
-serverIdParam,
-steamIdParam);
-    };
-    logger.Debug("Subscribing to: " + $"v0.rust.servers.{server_id}.events.player.{steam_id}.chatted");
-    return connection.SubscribeAsync($"v0.rust.servers.{server_id}.events.player.{steam_id}.chatted",handler);
-  }
-
+){
+  logger.Debug("Publishing to channel: " + $"v0.rust.servers.{server_id}.events.player.{steam_id}.chatted");
+  var serializedObject = JsonSerializerSupport(logger, requestMessage); 
+  connection.Publish("v0.rust.servers.{server_id}.events.player.{steam_id}.chatted", serializedObject);
+}
   }
 }
