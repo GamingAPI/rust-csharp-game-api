@@ -4,6 +4,9 @@ set -e
 # Cleanup potential old files
 [ -d "./definitions" ] && rm -rf ./definitions
 [ -d "./tooling" ] && rm -rf ./tooling
+libary_name="RustGameAPI"
+[ -d "./RustGameAPI" ] && rm -rf ./RustGameAPI
+[ -d "./RustGameAPITest" ] && rm -rf ./RustGameAPITest
 
 # Initial setup of variables
 library_last_version="0.0.0"
@@ -23,17 +26,17 @@ patch_version_change="false"
 commit_message=""
 document_last_version=$(cat ./configs.json | jq -r '.document_last_version')
 template_last_version=$(cat ./configs.json | jq -r '.template_last_version')
-template_current_version=$(curl -sL https://api.github.com/repos/asyncapi/dotnet-nats-template/releases/latest | jq -r '.tag_name' | sed 's/v//')
+template_current_version=$(curl -sL https://api.github.com/repos/jonaslagoni/dotnet-nats-template/releases/latest | jq -r '.tag_name' | sed 's/v//')
 git clone https://github.com/GamingAPI/definitions.git definitions
 document_current_version=$(cat ./definitions/bundled/rust.asyncapi.json | jq -r '.info.version' | sed 's/v//')
-if [ -f "./AsyncapiNatsClient/AsyncapiNatsClient.csproj" ]; then
+if [ -f "./${libary_name}/${libary_name}.csproj" ]; then
   if ! command -v xml-to-json &> /dev/null
   then
     git clone https://github.com/tyleradams/json-toolkit.git tooling
     cd ./tooling && make json-diff json-empty-array python-dependencies && sudo make install
     cd ..
   fi
-  library_last_version=$(cat ./AsyncapiNatsClient/AsyncapiNatsClient.csproj | xml-to-json | jq -r '.Project.PropertyGroup.Version')
+  library_last_version=$(cat ./${libary_name}/${libary_name}.csproj | xml-to-json | jq -r '.Project.PropertyGroup.Version')
 else
   library_last_version="0.0.0"
 fi
@@ -87,7 +90,8 @@ if $major_version_change == 'true' || $minor_version_change == 'true' || $patch_
     npm install -g @asyncapi/generator
   fi
   # Generating new code from the AsyncAPI document
-  ag --force-write --output ./ ./definitions/bundled/rust.asyncapi.json @asyncapi/dotnet-nats-template -p version="$library_last_version"
+  ag --force-write --output ./ ./definitions/bundled/rust.asyncapi.json https://github.com/jonaslagoni/dotnet-nats-template@master -p version="$library_last_version" -p targetFramework="netstandard2.0;netstandard2.1;net461" -p repositoryUrl="https://github.
+com/GamingAPI/rust-csharp-game-api.git" -p projectName="${libary_name}"
 
   # Write new config file to ensure we keep the new state for next time
   contents="$(jq ".template_last_version = \"$template_current_version\" | .document_last_version = \"$document_current_version\"" configs.json)" && echo "${contents}" > configs.json

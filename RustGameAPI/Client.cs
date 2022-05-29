@@ -9,13 +9,7 @@ using NATS.Client;
 namespace Asyncapi.Nats.Client
 {
 
-  public delegate void V0RustServersServerIdEventsStartedOnRequest(
-      String server_id
-    );
-public delegate void V0RustServersServerIdEventsPlayerSteamIdChattedOnRequest(
-      ChatMessage request,
-String server_id,String steam_id
-    );
+  
 
   public class NatsClient
   {
@@ -111,15 +105,14 @@ String server_id,String steam_id
     {
         this.Logger = logger;
     }
-    public IAsyncSubscription SubscribeToV0RustServersServerIdEventsStarted(
-  V0RustServersServerIdEventsStartedOnRequest onRequest,
-String server_id
-){
+    public void PublishToV0RustServersServerIdEventsStarted(
+  String server_id
+)
+  {
   if (IsConnected())
   {
-    return V0RustServersServerIdEventsStarted.Subscribe(logger,
+    V0RustServersServerIdEventsStarted.Publish(logger,
 connection,
-onRequest,
 server_id);
   }
   else
@@ -127,15 +120,16 @@ server_id);
     throw new ClientNotConnected();
   }
 }
-public IAsyncSubscription SubscribeToV0RustServersServerIdEventsPlayerSteamIdChatted(
-  V0RustServersServerIdEventsPlayerSteamIdChattedOnRequest onRequest,
+public void PublishToV0RustServersServerIdEventsPlayerSteamIdChatted(
+  ChatMessage requestMessage,
 String server_id,String steam_id
-){
+)
+  {
   if (IsConnected())
   {
-    return V0RustServersServerIdEventsPlayerSteamIdChatted.Subscribe(logger,
+    V0RustServersServerIdEventsPlayerSteamIdChatted.Publish(logger,
 connection,
-onRequest,
+requestMessage,
 server_id,steam_id);
   }
   else

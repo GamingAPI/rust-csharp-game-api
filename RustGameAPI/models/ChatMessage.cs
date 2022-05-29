@@ -13,7 +13,7 @@ namespace Asyncapi.Nats.Client.Models
     private string playerName;
     private string rawMessage;
     private string fullMessage;
-    private bool? isAdmin;
+    private bool isAdmin;
     private int? rank;
     private string title;
     private string timestamp;
@@ -43,7 +43,7 @@ namespace Asyncapi.Nats.Client.Models
       set { fullMessage = value; }
     }
 
-    public bool? IsAdmin 
+    public bool IsAdmin 
     {
       get { return isAdmin; }
       set { isAdmin = value; }
