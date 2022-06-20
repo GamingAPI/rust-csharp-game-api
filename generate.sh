@@ -5,7 +5,7 @@ set -e
 [ -d "./tooling" ] && rm -rf ./tooling
 
 # Initial setup of variables
-libary_name="<<[ .cus.LIBRARY_NAME]>>"
+libary_name="RustGameAPI"
 library_last_version="0.0.0"
 template_last_version="0.0.0"
 template_current_version="0.0.0"
@@ -23,7 +23,7 @@ patch_version_change="false"
 commit_message=""
 document_last_version=$(cat ./configs.json | jq -r '.document_last_version')
 template_last_version=$(cat ./configs.json | jq -r '.template_last_version')
-url_to_asyncapi_document="https://raw.githubusercontent.com/GamingAPI/definitions/main/bundled/<<[ .cus.ASYNCAPI_FILE ]>>"
+url_to_asyncapi_document="https://raw.githubusercontent.com/GamingAPI/definitions/main/bundled/rust.asyncapi.json"
 template_current_version=$(curl -sL https://api.github.com/repos/jonaslagoni/dotnet-nats-template/releases/latest | jq -r '.tag_name' | sed 's/v//')
 document_current_version=$(curl -sL ${url_to_asyncapi_document} | jq -r '.info.version' | sed 's/v//')
 
