@@ -5,7 +5,7 @@ set -e
 [ -d "./tooling" ] && rm -rf ./tooling
 
 # Initial setup of variables
-libary_name="rust-csharp-game-api"
+libary_name="RustGameApi"
 repository_url="https://github.com/GamingAPI/rust-csharp-game-api.git"
 library_last_version="0.0.0"
 template_last_version="0.0.0"
