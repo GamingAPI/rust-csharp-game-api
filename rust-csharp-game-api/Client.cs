@@ -106,13 +106,15 @@ namespace Asyncapi.Nats.Client
         this.Logger = logger;
     }
     public void PublishToV0RustServersServerIdEventsStarted(
-  String server_id
+  ServerStarted requestMessage,
+String server_id
 )
   {
   if (IsConnected())
   {
     V0RustServersServerIdEventsStarted.Publish(logger,
 connection,
+requestMessage,
 server_id);
   }
   else
