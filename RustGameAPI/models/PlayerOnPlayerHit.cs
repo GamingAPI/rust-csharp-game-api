@@ -92,25 +92,25 @@ namespace Asyncapi.Nats.Client.Models
         string propertyName = reader.GetString();
         if (propertyName == "hit_area_id")
         {
-          var value = JsonSerializer.Deserialize<int?>(ref reader, options);
+          var value = JsonSerializer.Deserialize<int>(ref reader, options);
           instance.HitAreaId = value;
           continue;
         }
         if (propertyName == "hit_distance")
         {
-          var value = JsonSerializer.Deserialize<double?>(ref reader, options);
+          var value = JsonSerializer.Deserialize<double>(ref reader, options);
           instance.HitDistance = value;
           continue;
         }
         if (propertyName == "hit_damage")
         {
-          var value = JsonSerializer.Deserialize<double?>(ref reader, options);
+          var value = JsonSerializer.Deserialize<double>(ref reader, options);
           instance.HitDamage = value;
           continue;
         }
         if (propertyName == "isKill")
         {
-          var value = JsonSerializer.Deserialize<bool?>(ref reader, options);
+          var value = JsonSerializer.Deserialize<bool>(ref reader, options);
           instance.IsKill = value;
           continue;
         }

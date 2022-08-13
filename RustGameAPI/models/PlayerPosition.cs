@@ -71,19 +71,19 @@ namespace Asyncapi.Nats.Client.Models
         string propertyName = reader.GetString();
         if (propertyName == "x")
         {
-          var value = JsonSerializer.Deserialize<double?>(ref reader, options);
+          var value = JsonSerializer.Deserialize<double>(ref reader, options);
           instance.X = value;
           continue;
         }
         if (propertyName == "y")
         {
-          var value = JsonSerializer.Deserialize<double?>(ref reader, options);
+          var value = JsonSerializer.Deserialize<double>(ref reader, options);
           instance.Y = value;
           continue;
         }
         if (propertyName == "z")
         {
-          var value = JsonSerializer.Deserialize<double?>(ref reader, options);
+          var value = JsonSerializer.Deserialize<double>(ref reader, options);
           instance.Z = value;
           continue;
         }
