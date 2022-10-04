@@ -3,6 +3,7 @@ using System;
 using System.Text;
 using System.Text.Json;
 using Asyncapi.Nats.Client.Models;
+using NATS.Client.JetStream;
 
 namespace Asyncapi.Nats.Client.Channels
 {
@@ -19,13 +20,24 @@ internal static byte[] JsonSerializerSupport(LoggingInterface logger, ServerPlay
 
 public static void Publish(
   LoggingInterface logger,
-IEncodedConnection connection,
+IConnection connection,
 ServerPlayerUnbanned requestMessage,
 String server_id,String steam_id
 ){
   logger.Debug("Publishing to channel: " + $"v0.rust.servers.{server_id}.players.{steam_id}.events.unbanned");
   var serializedObject = JsonSerializerSupport(logger, requestMessage); 
-  connection.Publish("v0.rust.servers.{server_id}.players.{steam_id}.events.unbanned", serializedObject);
-}
-  }
+  connection.Publish($"v0.rust.servers.{server_id}.players.{steam_id}.events.unbanned", serializedObject);
+        }
+        public static void PublishJetStream(
+          LoggingInterface logger,
+        IJetStream connection,
+ServerPlayerUnbanned requestMessage,
+String server_id, String steam_id
+        )
+        {
+            logger.Debug("Publishing to channel: " + $"v0.rust.servers.{server_id}.players.{steam_id}.events.unbanned");
+            var serializedObject = JsonSerializerSupport(logger, requestMessage);
+            connection.Publish($"v0.rust.servers.{server_id}.players.{steam_id}.events.unbanned", serializedObject);
+        }
+    }
 }

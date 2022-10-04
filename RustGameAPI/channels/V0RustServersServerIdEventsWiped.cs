@@ -3,6 +3,7 @@ using System;
 using System.Text;
 using System.Text.Json;
 using Asyncapi.Nats.Client.Models;
+using NATS.Client.JetStream;
 
 namespace Asyncapi.Nats.Client.Channels
 {
@@ -14,11 +15,20 @@ namespace Asyncapi.Nats.Client.Channels
 
 public static void Publish(
   LoggingInterface logger,
-IEncodedConnection connection,
+IConnection connection,
 String server_id
 ){
   logger.Debug("Publishing to channel: " + $"v0.rust.servers.{server_id}.events.wiped");
   connection.Publish($"v0.rust.servers.{server_id}.events.wiped", Encoding.UTF8.GetBytes("null"));
-}
-  }
+        }
+        public static void PublishJetStream(
+          LoggingInterface logger,
+        IJetStream connection,
+String server_id
+        )
+        {
+            logger.Debug("Publishing to channel: " + $"v0.rust.servers.{server_id}.events.wiped");
+            connection.Publish($"v0.rust.servers.{server_id}.events.wiped", Encoding.UTF8.GetBytes("null"));
+        }
+    }
 }

@@ -13,7 +13,8 @@ namespace Asyncapi.Nats.Client.Tests
             ServerPlayerItemCrafted temp = new ServerPlayerItemCrafted();
             string json = JsonSerializer.Serialize(temp);
             ServerPlayerItemCrafted output = JsonSerializer.Deserialize<ServerPlayerItemCrafted>(json);
-            Assert.Equal(temp, output);
+            string json2 = JsonSerializer.Serialize(output);
+            Assert.Equal(json, json2);
         }
     }
 }

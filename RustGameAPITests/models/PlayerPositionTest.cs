@@ -13,7 +13,8 @@ namespace Asyncapi.Nats.Client.Tests
             PlayerPosition temp = new PlayerPosition();
             string json = JsonSerializer.Serialize(temp);
             PlayerPosition output = JsonSerializer.Deserialize<PlayerPosition>(json);
-            Assert.Equal(temp, output);
+            string json2 = JsonSerializer.Serialize(output);
+            Assert.Equal(json, json2);
         }
     }
 }

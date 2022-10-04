@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Asyncapi.Nats.Client.Channels;
 using Asyncapi.Nats.Client.Models;
 using NATS.Client;
+using NATS.Client.JetStream;
+
 namespace Asyncapi.Nats.Client
 {
 
@@ -28,7 +30,8 @@ namespace Asyncapi.Nats.Client
 		{
 		}
 	}
-	private IEncodedConnection connection;
+	private IConnection connection;
+	private IJetStream jetstream;
 	private LoggingInterface logger;
 	public LoggingInterface Logger
 	{
@@ -41,46 +44,30 @@ namespace Asyncapi.Nats.Client
 		{
 			logger = value;
 		}
-	}	
-
-	internal byte[] JsonSerializer(object obj)
-	{
-		if (obj == null)
-		{
-			return null;
-		}
-		return (byte[])obj;
-	}
-
-
-
-	internal object JsonDeserializer(byte[] buffer)
-	{
-		return buffer;
 	}
 
 	public void Connect()
 	{
-		connection = new ConnectionFactory().CreateEncodedConnection();
-		setserializers();
-	}
+		connection = new ConnectionFactory().CreateConnection();
+		}
 
-	private void setserializers()
-	{
-		connection.OnDeserialize = JsonDeserializer;
-		connection.OnSerialize = JsonSerializer;
-	}
+		
+		public void createJetStreamContext(JetStreamOptions options)
+		{
 
-	public void Connect(string url)
+			//JetStreamOptions jso = JetStreamOptions.Builder().WithOptOut290ConsumerCreate(true).Build();
+			jetstream = connection.CreateJetStreamContext(options);
+		}
+
+
+		public void Connect(string url)
 	{
-		connection = new ConnectionFactory().CreateEncodedConnection(url);
-		setserializers();
+		connection = new ConnectionFactory().CreateConnection(url);
 	}
 	
 	public void Connect(Options opts)
 	{
-		connection = new ConnectionFactory().CreateEncodedConnection(opts);
-		setserializers();
+		connection = new ConnectionFactory().CreateConnection(opts);
 	}
 	public Boolean IsConnected()
 	{
@@ -114,6 +101,23 @@ String server_id
   {
     V0RustServersServerIdEventsStarted.Publish(logger,
 connection,
+requestMessage,
+server_id);
+  }
+  else
+  {
+    throw new ClientNotConnected();
+  }
+}
+public void PublishToV0RustServersServerIdEventsStartedJetStream(
+  ServerStarted requestMessage,
+  String server_id
+)
+  {
+  if (IsConnected())
+  {
+    V0RustServersServerIdEventsStarted.PublishJetStream(logger,
+jetstream,
 requestMessage,
 server_id);
   }

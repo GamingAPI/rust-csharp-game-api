@@ -13,7 +13,8 @@ namespace Asyncapi.Nats.Client.Tests
             ServerPlayerConnected temp = new ServerPlayerConnected();
             string json = JsonSerializer.Serialize(temp);
             ServerPlayerConnected output = JsonSerializer.Deserialize<ServerPlayerConnected>(json);
-            Assert.Equal(temp, output);
+            string json2 = JsonSerializer.Serialize(output);
+            Assert.Equal(json, json2);
         }
     }
 }

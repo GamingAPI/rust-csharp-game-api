@@ -13,7 +13,8 @@ namespace Asyncapi.Nats.Client.Tests
             PlayerHit temp = new PlayerHit();
             string json = JsonSerializer.Serialize(temp);
             PlayerHit output = JsonSerializer.Deserialize<PlayerHit>(json);
-            Assert.Equal(temp, output);
+            string json2 = JsonSerializer.Serialize(output);
+            Assert.Equal(json, json2);
         }
     }
 }

@@ -19,7 +19,7 @@ internal static byte[] JsonSerializerSupport(LoggingInterface logger, ServerComm
 
 public static void Publish(
   LoggingInterface logger,
-IEncodedConnection connection,
+IConnection connection,
 ServerCommand requestMessage,
 String server_id
 ){
