@@ -83,7 +83,7 @@ namespace Asyncapi.Nats.Client.Tests
             Assert.True(client.IsConnected());
             Assert.True(mirrorClient.IsConnected());
             var message = new ServerStarted();
-            message.Timestamp = System.DateTime.UtcNow.ToString();
+            message.Timestamp = DateTime.UtcNow.ToString();
             var serverId = "123";
             var mock = new Mock<Mirror.NatsClient.SubscribeToV0RustServersServerIdEventsStartedDelegate>();
 

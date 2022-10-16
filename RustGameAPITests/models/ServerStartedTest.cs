@@ -11,6 +11,7 @@ namespace Asyncapi.Nats.Client.Tests
         public void ShouldSerializeAndDeserializeAccurately()
         {
             ServerStarted temp = new ServerStarted();
+            temp.Timestamp = "Test";
             string json = JsonSerializer.Serialize(temp);
             ServerStarted output = JsonSerializer.Deserialize<ServerStarted>(json);
             string json2 = JsonSerializer.Serialize(output);
