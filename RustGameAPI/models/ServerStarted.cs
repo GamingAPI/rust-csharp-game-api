@@ -1,13 +1,11 @@
 namespace Asyncapi.Nats.Client.Models
 {
-  using System.Collections.Generic;
-  using System.Text.Json;
-  using System.Text.Json.Serialization;
-  using System.Text.RegularExpressions;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+    using System;
+    using System.Collections.Generic;
   using System.Linq;
-
-  [JsonConverter(typeof(ServerStartedConverter))]
-  public class ServerStarted
+    public class ServerStarted
   {
     private string timestamp;
     private Dictionary<string, dynamic> additionalProperties;
@@ -24,92 +22,54 @@ namespace Asyncapi.Nats.Client.Models
       set { additionalProperties = value; }
     }
   }
-
-  internal class ServerStartedConverter : JsonConverter<ServerStarted>
-  {
-    public override bool CanConvert(System.Type objectType)
+    public class ServerStartedConverter : JsonConverter<ServerStarted>
     {
-      // this converter can be applied to any type
-      return true;
+        private readonly Type[] _types;
+
+        public ServerStartedConverter(params Type[] types)
+        {
+            _types = types;
+        }
+
+        public override void WriteJson(JsonWriter writer, ServerStarted value, JsonSerializer serializer)
+        {
+            JObject jo = new JObject();
+
+            if (value.Timestamp != null)
+            {
+                jo.Add("timestamp", JToken.FromObject(value.Timestamp, serializer));
+            }
+            // Unwrap additional properties in object
+            if (value.AdditionalProperties != null)
+            {
+                foreach (var additionalProperty in value.AdditionalProperties)
+                {
+                    var hasProp = jo[additionalProperty.Key]; 
+                    if (hasProp != null) continue;
+                    jo.Add(additionalProperty.Key, JToken.FromObject(additionalProperty.Value, serializer));
+                }
+            }
+
+            jo.WriteTo(writer);
+        }
+
+        public override ServerStarted ReadJson(JsonReader reader, Type objectType, ServerStarted existingValue, bool hasExistingValue, JsonSerializer serializer)
+        {
+            JObject jo = JObject.Load(reader);
+            ServerStarted value = new ServerStarted();
+            value.Timestamp = (string)jo["timestamp"];
+            var additionalProperties = jo.Properties().Where((prop) => prop.Name != "timestamp");
+            var coreProperties = jo.Properties().Where((prop) => prop.Name == "timestamp");
+            value.AdditionalProperties = new Dictionary<string, dynamic>();
+
+            foreach (var additionalProperty in additionalProperties)
+            {
+                value.AdditionalProperties[additionalProperty.Name] = JsonConvert.DeserializeObject(additionalProperty.Value.ToString());
+            }
+            return value;
+        }
+
+        public override bool CanRead => true;
+        public override bool CanWrite => true;
     }
-    public override ServerStarted Read(ref Utf8JsonReader reader, System.Type typeToConvert, JsonSerializerOptions options)
-    {
-      if (reader.TokenType != JsonTokenType.StartObject)
-      {
-        throw new JsonException();
-      }
-
-      var instance = new ServerStarted();
-  
-      while (reader.Read())
-      {
-        if (reader.TokenType == JsonTokenType.EndObject)
-        {
-          return instance;
-        }
-
-        // Get the key.
-        if (reader.TokenType != JsonTokenType.PropertyName)
-        {
-          throw new JsonException();
-        }
-
-        string propertyName = reader.GetString();
-        if (propertyName == "timestamp")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.Timestamp = value;
-          continue;
-        }
-
-    
-
-        if(instance.AdditionalProperties == null) { instance.AdditionalProperties = new Dictionary<string, dynamic>(); }
-        var deserializedValue = JsonSerializer.Deserialize<dynamic>(ref reader, options);
-        instance.AdditionalProperties.Add(propertyName, deserializedValue);
-        continue;
-      }
-  
-      throw new JsonException();
-    }
-    public override void Write(Utf8JsonWriter writer, ServerStarted value, JsonSerializerOptions options)
-    {
-      if (value == null)
-      {
-        JsonSerializer.Serialize(writer, null, options);
-        return;
-      }
-      var properties = value.GetType().GetProperties().Where(prop => prop.Name != "AdditionalProperties");
-  
-      writer.WriteStartObject();
-
-      if(value.Timestamp != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("timestamp");
-        JsonSerializer.Serialize(writer, value.Timestamp, options);
-      }
-
-
-  
-
-      // Unwrap additional properties in object
-      if (value.AdditionalProperties != null) {
-        foreach (var additionalProperty in value.AdditionalProperties)
-        {
-          //Ignore any additional properties which might already be part of the core properties
-          if (properties.Any(prop => prop.Name == additionalProperty.Key))
-          {
-              continue;
-          }
-          // write property name and let the serializer serialize the value itself
-          writer.WritePropertyName(additionalProperty.Key);
-          JsonSerializer.Serialize(writer, additionalProperty.Value, options);
-        }
-      }
-
-      writer.WriteEndObject();
-    }
-
-  }
-
 }

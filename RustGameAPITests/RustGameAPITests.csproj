@@ -8,6 +8,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="models\ActiveItemTest.cs" />
+    <Compile Remove="models\ChatMessageTest.cs" />
+    <Compile Remove="models\PlayerHitTest.cs" />
+    <Compile Remove="models\PlayerOnPlayerHitTest.cs" />
+    <Compile Remove="models\PlayerPositionTest.cs" />
+    <Compile Remove="models\PlayerTest.cs" />
+    <Compile Remove="models\ServerCommandTest.cs" />
+    <Compile Remove="models\ServerPlayerBannedTest.cs" />
+    <Compile Remove="models\ServerPlayerCombatPlayerhitTest.cs" />
+    <Compile Remove="models\ServerPlayerConnectedTest.cs" />
+    <Compile Remove="models\ServerPlayerDisconnectedPlayerTest.cs" />
+    <Compile Remove="models\ServerPlayerDisconnectedTest.cs" />
+    <Compile Remove="models\ServerPlayerItemCraftedTest.cs" />
+    <Compile Remove="models\ServerPlayerItemLootTest.cs" />
+    <Compile Remove="models\ServerPlayerItemPickupTest.cs" />
+    <Compile Remove="models\ServerPlayerReportedTest.cs" />
+    <Compile Remove="models\ServerPlayerResourceGatheredTest.cs" />
+    <Compile Remove="models\ServerPlayerRespawnedTest.cs" />
+    <Compile Remove="models\ServerPlayerUnbannedTest.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="Moq" Version="4.18.2" />
     <PackageReference Include="xunit" Version="2.4.0" />

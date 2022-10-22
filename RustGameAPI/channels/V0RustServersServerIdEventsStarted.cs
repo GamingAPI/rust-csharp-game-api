@@ -1,10 +1,9 @@
 using NATS.Client;
 using System;
-using System.Text;
-using System.Text.Json;
 using Asyncapi.Nats.Client.Models;
 using NATS.Client.JetStream;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace Asyncapi.Nats.Client.Channels
 {
@@ -12,7 +11,7 @@ namespace Asyncapi.Nats.Client.Channels
     {
         internal static byte[] JsonSerializerSupport(LoggingInterface logger, ServerStarted obj)
         {
-            var json = JsonSerializer.Serialize(obj);
+            var json = JsonConvert.SerializeObject(obj);
             logger.Debug("Serialized message " + json);
             return Encoding.UTF8.GetBytes(json);
         }

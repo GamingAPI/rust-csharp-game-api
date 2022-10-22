@@ -1,11 +1,10 @@
 using NATS.Client;
 using System;
 using System.Text;
-using System.Text.Json;
 using Asyncapi.Nats.Client.Models;
 using NATS.Client.JetStream;
-using System.Threading.Tasks;
 using static Asyncapi.Nats.Client.Mirror.NatsClient;
+using Newtonsoft.Json;
 
 namespace Asyncapi.Nats.Client.Mirror.Channels
 {
@@ -16,7 +15,7 @@ namespace Asyncapi.Nats.Client.Mirror.Channels
         {
             var srt = Encoding.UTF8.GetString(buffer);
             logger.Debug("Deserializing message " + srt);
-            return JsonSerializer.Deserialize<ServerStarted>(srt);
+            return JsonConvert.DeserializeObject<ServerStarted>(srt);
         }
         public static IAsyncSubscription Subscribe(
           LoggingInterface logger,

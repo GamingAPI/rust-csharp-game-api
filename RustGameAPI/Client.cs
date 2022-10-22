@@ -126,478 +126,478 @@ namespace Asyncapi.Nats.Client
                 throw new ClientNotConnected();
             }
         }
-        public void PublishToV0RustServersServerIdEventsPlayerSteamIdChatted(
-          ChatMessage requestMessage,
-        String server_id, String steam_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdEventsPlayerSteamIdChatted.Publish(logger,
-            connection,
-            requestMessage,
-            server_id, steam_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdEventsPlayerSteamIdChattedJetStream(
-  ChatMessage requestMessage,
-String server_id, String steam_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdEventsPlayerSteamIdChatted.PublishJetStream(logger,
-            jetstream,
-            requestMessage,
+//        public void PublishToV0RustServersServerIdEventsPlayerSteamIdChatted(
+//          ChatMessage requestMessage,
+//        String server_id, String steam_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdEventsPlayerSteamIdChatted.Publish(logger,
+//            connection,
+//            requestMessage,
+//            server_id, steam_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdEventsPlayerSteamIdChattedJetStream(
+//  ChatMessage requestMessage,
+//String server_id, String steam_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdEventsPlayerSteamIdChatted.PublishJetStream(logger,
+//            jetstream,
+//            requestMessage,
 
-server_id, steam_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdEventsWiped(
-  String server_id
-)
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdEventsWiped.Publish(logger,
-            connection,
-            server_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdEventsWipedJetStream(
-  String server_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdEventsWiped.PublishJetStream(logger,
-            jetstream,
-            server_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsConnected(
-          ServerPlayerConnected requestMessage,
-        String server_id, String steam_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsConnected.Publish(logger,
-            connection,
-            requestMessage,
-            server_id, steam_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsConnectedJetStream(
-  ServerPlayerConnected requestMessage,
-        String server_id, String steam_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsConnected.PublishJetStream(logger,
-            jetstream,
-            requestMessage,
-            server_id, steam_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsDisconnected(
-          ServerPlayerDisconnected requestMessage,
-        String server_id, String steam_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsDisconnected.Publish(logger,
-            connection,
-            requestMessage,
-            server_id, steam_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsDisconnectedJetStream(
-  ServerPlayerDisconnected requestMessage,
-        String server_id, String steam_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsDisconnected.PublishJetStream(logger,
-            jetstream,
-            requestMessage,
-            server_id, steam_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsGatheredResources(
-          ServerPlayerResourceGathered requestMessage,
-        String server_id, String steam_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsGatheredResources.Publish(logger,
-            connection,
-            requestMessage,
-            server_id, steam_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsGatheredResourcesJetStream(
-          ServerPlayerResourceGathered requestMessage,
-        String server_id, String steam_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsGatheredResources.PublishJetStream(logger,
-            jetstream,
-            requestMessage,
-            server_id, steam_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsRespawned(
-          ServerPlayerRespawned requestMessage,
-        String server_id, String steam_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsRespawned.Publish(logger,
-            connection,
-            requestMessage,
-            server_id, steam_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsRespawnedJetStream(
-          ServerPlayerRespawned requestMessage,
-        String server_id, String steam_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsRespawned.PublishJetStream(logger,
-            jetstream,
-            requestMessage,
-            server_id, steam_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsCombatHit(
-          ServerPlayerCombatPlayerhit requestMessage,
-        String server_id, String steam_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsCombatHit.Publish(logger,
-            connection,
-            requestMessage,
-            server_id, steam_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsCombatHitJetStream(
-          ServerPlayerCombatPlayerhit requestMessage,
-        String server_id, String steam_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsCombatHit.PublishJetStream(logger,
-            jetstream,
-            requestMessage,
-            server_id, steam_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsItemsItemIdPickup(
-          ServerPlayerItemPickup requestMessage,
-        String server_id, String steam_id, String item_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsItemsItemIdPickup.Publish(logger,
-            connection,
-            requestMessage,
-            server_id, steam_id, item_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsItemsItemIdPickupJetStream(
-          ServerPlayerItemPickup requestMessage,
-        String server_id, String steam_id, String item_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsItemsItemIdPickup.PublishJetStream(logger,
-            jetstream,
-            requestMessage,
-            server_id, steam_id, item_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsItemsItemIdLoot(
-          ServerPlayerItemLoot requestMessage,
-        String server_id, String steam_id, String item_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsItemsItemIdLoot.Publish(logger,
-            connection,
-            requestMessage,
-            server_id, steam_id, item_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsItemsItemIdLootJetStream(
-          ServerPlayerItemLoot requestMessage,
-        String server_id, String steam_id, String item_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsItemsItemIdLoot.PublishJetStream(logger,
-            jetstream,
-            requestMessage,
-            server_id, steam_id, item_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsItemsItemIdCrafted(
-          ServerPlayerItemCrafted requestMessage,
-        String server_id, String steam_id, String item_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsItemsItemIdCrafted.Publish(logger,
-            connection,
-            requestMessage,
-            server_id, steam_id, item_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsItemsItemIdCraftedJetStream(
-          ServerPlayerItemCrafted requestMessage,
-        String server_id, String steam_id, String item_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsItemsItemIdCrafted.PublishJetStream(logger,
-            jetstream,
-            requestMessage,
-            server_id, steam_id, item_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdEventsCommand(
-          ServerCommand requestMessage,
-        String server_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdEventsCommand.Publish(logger,
-            connection,
-            requestMessage,
-            server_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdEventsCommandJetStream(
-          ServerCommand requestMessage,
-        String server_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdEventsCommand.PublishJetStream(logger,
-            jetstream,
-            requestMessage,
-            server_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsReported(
-          ServerPlayerReported requestMessage,
-        String server_id, String steam_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsReported.Publish(logger,
-            connection,
-            requestMessage,
-            server_id, steam_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsReportedJetStream(
-          ServerPlayerReported requestMessage,
-        String server_id, String steam_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsReported.PublishJetStream(logger,
-            jetstream,
-            requestMessage,
-            server_id, steam_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsUnbanned(
-          ServerPlayerUnbanned requestMessage,
-        String server_id, String steam_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsUnbanned.Publish(logger,
-            connection,
-            requestMessage,
-            server_id, steam_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsUnbannedJetStream(
-          ServerPlayerUnbanned requestMessage,
-        String server_id, String steam_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsUnbanned.PublishJetStream(logger,
-            jetstream,
-            requestMessage,
-            server_id, steam_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsBanned(
-          ServerPlayerBanned requestMessage,
-        String server_id, String steam_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsBanned.Publish(logger,
-            connection,
-            requestMessage,
-            server_id, steam_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
-        public void PublishToV0RustServersServerIdPlayersSteamIdEventsBannedJetStream(
-          ServerPlayerBanned requestMessage,
-        String server_id, String steam_id
-        )
-        {
-            if (IsConnected())
-            {
-                V0RustServersServerIdPlayersSteamIdEventsBanned.PublishJetStream(logger,
-            jetstream,
-            requestMessage,
-            server_id, steam_id);
-            }
-            else
-            {
-                throw new ClientNotConnected();
-            }
-        }
+//server_id, steam_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdEventsWiped(
+//  String server_id
+//)
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdEventsWiped.Publish(logger,
+//            connection,
+//            server_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdEventsWipedJetStream(
+//  String server_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdEventsWiped.PublishJetStream(logger,
+//            jetstream,
+//            server_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsConnected(
+//          ServerPlayerConnected requestMessage,
+//        String server_id, String steam_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsConnected.Publish(logger,
+//            connection,
+//            requestMessage,
+//            server_id, steam_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsConnectedJetStream(
+//  ServerPlayerConnected requestMessage,
+//        String server_id, String steam_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsConnected.PublishJetStream(logger,
+//            jetstream,
+//            requestMessage,
+//            server_id, steam_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsDisconnected(
+//          ServerPlayerDisconnected requestMessage,
+//        String server_id, String steam_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsDisconnected.Publish(logger,
+//            connection,
+//            requestMessage,
+//            server_id, steam_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsDisconnectedJetStream(
+//  ServerPlayerDisconnected requestMessage,
+//        String server_id, String steam_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsDisconnected.PublishJetStream(logger,
+//            jetstream,
+//            requestMessage,
+//            server_id, steam_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsGatheredResources(
+//          ServerPlayerResourceGathered requestMessage,
+//        String server_id, String steam_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsGatheredResources.Publish(logger,
+//            connection,
+//            requestMessage,
+//            server_id, steam_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsGatheredResourcesJetStream(
+//          ServerPlayerResourceGathered requestMessage,
+//        String server_id, String steam_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsGatheredResources.PublishJetStream(logger,
+//            jetstream,
+//            requestMessage,
+//            server_id, steam_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsRespawned(
+//          ServerPlayerRespawned requestMessage,
+//        String server_id, String steam_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsRespawned.Publish(logger,
+//            connection,
+//            requestMessage,
+//            server_id, steam_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsRespawnedJetStream(
+//          ServerPlayerRespawned requestMessage,
+//        String server_id, String steam_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsRespawned.PublishJetStream(logger,
+//            jetstream,
+//            requestMessage,
+//            server_id, steam_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsCombatHit(
+//          ServerPlayerCombatPlayerhit requestMessage,
+//        String server_id, String steam_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsCombatHit.Publish(logger,
+//            connection,
+//            requestMessage,
+//            server_id, steam_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsCombatHitJetStream(
+//          ServerPlayerCombatPlayerhit requestMessage,
+//        String server_id, String steam_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsCombatHit.PublishJetStream(logger,
+//            jetstream,
+//            requestMessage,
+//            server_id, steam_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsItemsItemIdPickup(
+//          ServerPlayerItemPickup requestMessage,
+//        String server_id, String steam_id, String item_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsItemsItemIdPickup.Publish(logger,
+//            connection,
+//            requestMessage,
+//            server_id, steam_id, item_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsItemsItemIdPickupJetStream(
+//          ServerPlayerItemPickup requestMessage,
+//        String server_id, String steam_id, String item_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsItemsItemIdPickup.PublishJetStream(logger,
+//            jetstream,
+//            requestMessage,
+//            server_id, steam_id, item_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsItemsItemIdLoot(
+//          ServerPlayerItemLoot requestMessage,
+//        String server_id, String steam_id, String item_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsItemsItemIdLoot.Publish(logger,
+//            connection,
+//            requestMessage,
+//            server_id, steam_id, item_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsItemsItemIdLootJetStream(
+//          ServerPlayerItemLoot requestMessage,
+//        String server_id, String steam_id, String item_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsItemsItemIdLoot.PublishJetStream(logger,
+//            jetstream,
+//            requestMessage,
+//            server_id, steam_id, item_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsItemsItemIdCrafted(
+//          ServerPlayerItemCrafted requestMessage,
+//        String server_id, String steam_id, String item_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsItemsItemIdCrafted.Publish(logger,
+//            connection,
+//            requestMessage,
+//            server_id, steam_id, item_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsItemsItemIdCraftedJetStream(
+//          ServerPlayerItemCrafted requestMessage,
+//        String server_id, String steam_id, String item_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsItemsItemIdCrafted.PublishJetStream(logger,
+//            jetstream,
+//            requestMessage,
+//            server_id, steam_id, item_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdEventsCommand(
+//          ServerCommand requestMessage,
+//        String server_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdEventsCommand.Publish(logger,
+//            connection,
+//            requestMessage,
+//            server_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdEventsCommandJetStream(
+//          ServerCommand requestMessage,
+//        String server_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdEventsCommand.PublishJetStream(logger,
+//            jetstream,
+//            requestMessage,
+//            server_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsReported(
+//          ServerPlayerReported requestMessage,
+//        String server_id, String steam_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsReported.Publish(logger,
+//            connection,
+//            requestMessage,
+//            server_id, steam_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsReportedJetStream(
+//          ServerPlayerReported requestMessage,
+//        String server_id, String steam_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsReported.PublishJetStream(logger,
+//            jetstream,
+//            requestMessage,
+//            server_id, steam_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsUnbanned(
+//          ServerPlayerUnbanned requestMessage,
+//        String server_id, String steam_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsUnbanned.Publish(logger,
+//            connection,
+//            requestMessage,
+//            server_id, steam_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsUnbannedJetStream(
+//          ServerPlayerUnbanned requestMessage,
+//        String server_id, String steam_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsUnbanned.PublishJetStream(logger,
+//            jetstream,
+//            requestMessage,
+//            server_id, steam_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsBanned(
+//          ServerPlayerBanned requestMessage,
+//        String server_id, String steam_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsBanned.Publish(logger,
+//            connection,
+//            requestMessage,
+//            server_id, steam_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
+//        public void PublishToV0RustServersServerIdPlayersSteamIdEventsBannedJetStream(
+//          ServerPlayerBanned requestMessage,
+//        String server_id, String steam_id
+//        )
+//        {
+//            if (IsConnected())
+//            {
+//                V0RustServersServerIdPlayersSteamIdEventsBanned.PublishJetStream(logger,
+//            jetstream,
+//            requestMessage,
+//            server_id, steam_id);
+//            }
+//            else
+//            {
+//                throw new ClientNotConnected();
+//            }
+//        }
     }
 }
