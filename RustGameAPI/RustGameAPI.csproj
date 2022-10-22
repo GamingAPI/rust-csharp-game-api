@@ -3,55 +3,55 @@
   <PropertyGroup>
     <TargetFrameworks>net46;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
     <RootNamespace>Asyncapi.Nats.Client</RootNamespace>
-    <Version>0.10.0</Version>
-    <PackageVersion>0.10.0</PackageVersion>
-    <AssemblyVersion>0.10.0.0</AssemblyVersion>
-    <FileVersion>0.10.0.0</FileVersion>
+    <Version>0.11.0</Version>
+    <PackageVersion>0.11.0</PackageVersion>
+    <AssemblyVersion>0.11.0.0</AssemblyVersion>
+    <FileVersion>0.11.0.0</FileVersion>
     <RepositoryUrl>https://github.com/GamingAPI/rust-csharp-game-api.git</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="channels\V0RustServersServerIdEventsCommand.cs" />
-    <Compile Remove="channels\V0RustServersServerIdEventsPlayerSteamIdChatted.cs" />
-    <Compile Remove="channels\V0RustServersServerIdEventsWiped.cs" />
-    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsBanned.cs" />
-    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsCombatHit.cs" />
-    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsConnected.cs" />
-    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsDisconnected.cs" />
-    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsGatheredResources.cs" />
-    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsItemsItemIdCrafted.cs" />
-    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsItemsItemIdLoot.cs" />
-    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsItemsItemIdPickup.cs" />
-    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsReported.cs" />
-    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsRespawned.cs" />
-    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsUnbanned.cs" />
-    <Compile Remove="models\ActiveItem.cs" />
-    <Compile Remove="models\ChatMessage.cs" />
-    <Compile Remove="models\Player.cs" />
-    <Compile Remove="models\PlayerHit.cs" />
-    <Compile Remove="models\PlayerOnPlayerHit.cs" />
-    <Compile Remove="models\PlayerPosition.cs" />
-    <Compile Remove="models\ServerCommand.cs" />
-    <Compile Remove="models\ServerPlayerBanned.cs" />
-    <Compile Remove="models\ServerPlayerCombatPlayerhit.cs" />
-    <Compile Remove="models\ServerPlayerConnected.cs" />
-    <Compile Remove="models\ServerPlayerDisconnected.cs" />
-    <Compile Remove="models\ServerPlayerDisconnectedPlayer.cs" />
-    <Compile Remove="models\ServerPlayerItemCrafted.cs" />
-    <Compile Remove="models\ServerPlayerItemLoot.cs" />
-    <Compile Remove="models\ServerPlayerItemPickup.cs" />
-    <Compile Remove="models\ServerPlayerReported.cs" />
-    <Compile Remove="models\ServerPlayerResourceGathered.cs" />
-    <Compile Remove="models\ServerPlayerRespawned.cs" />
-    <Compile Remove="models\ServerPlayerUnbanned.cs" />
+    <Compile Remove="channels\V0RustServersServerIdEventsCommand.cs"/>
+    <Compile Remove="channels\V0RustServersServerIdEventsPlayerSteamIdChatted.cs"/>
+    <Compile Remove="channels\V0RustServersServerIdEventsWiped.cs"/>
+    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsBanned.cs"/>
+    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsCombatHit.cs"/>
+    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsConnected.cs"/>
+    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsDisconnected.cs"/>
+    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsGatheredResources.cs"/>
+    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsItemsItemIdCrafted.cs"/>
+    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsItemsItemIdLoot.cs"/>
+    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsItemsItemIdPickup.cs"/>
+    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsReported.cs"/>
+    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsRespawned.cs"/>
+    <Compile Remove="channels\V0RustServersServerIdPlayersSteamIdEventsUnbanned.cs"/>
+    <Compile Remove="models\ActiveItem.cs"/>
+    <Compile Remove="models\ChatMessage.cs"/>
+    <Compile Remove="models\Player.cs"/>
+    <Compile Remove="models\PlayerHit.cs"/>
+    <Compile Remove="models\PlayerOnPlayerHit.cs"/>
+    <Compile Remove="models\PlayerPosition.cs"/>
+    <Compile Remove="models\ServerCommand.cs"/>
+    <Compile Remove="models\ServerPlayerBanned.cs"/>
+    <Compile Remove="models\ServerPlayerCombatPlayerhit.cs"/>
+    <Compile Remove="models\ServerPlayerConnected.cs"/>
+    <Compile Remove="models\ServerPlayerDisconnected.cs"/>
+    <Compile Remove="models\ServerPlayerDisconnectedPlayer.cs"/>
+    <Compile Remove="models\ServerPlayerItemCrafted.cs"/>
+    <Compile Remove="models\ServerPlayerItemLoot.cs"/>
+    <Compile Remove="models\ServerPlayerItemPickup.cs"/>
+    <Compile Remove="models\ServerPlayerReported.cs"/>
+    <Compile Remove="models\ServerPlayerResourceGathered.cs"/>
+    <Compile Remove="models\ServerPlayerRespawned.cs"/>
+    <Compile Remove="models\ServerPlayerUnbanned.cs"/>
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="NATS.Client" />
+    <None Remove="NATS.Client"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NATS.Client" Version="1.0.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="NATS.Client" Version="1.0.1"/>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>
   </ItemGroup>
 </Project>
