@@ -13,8 +13,7 @@ namespace Asyncapi.Nats.Client.Tests
             ServerCommand temp = new ServerCommand();
             string json = JsonSerializer.Serialize(temp);
             ServerCommand output = JsonSerializer.Deserialize<ServerCommand>(json);
-            string json2 = JsonSerializer.Serialize(output);
-            Assert.Equal(json, json2);
+            Assert.Equal(temp, output);
         }
     }
 }

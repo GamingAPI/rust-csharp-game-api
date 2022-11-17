@@ -13,8 +13,7 @@ namespace Asyncapi.Nats.Client.Tests
             ServerPlayerUnbanned temp = new ServerPlayerUnbanned();
             string json = JsonSerializer.Serialize(temp);
             ServerPlayerUnbanned output = JsonSerializer.Deserialize<ServerPlayerUnbanned>(json);
-            string json2 = JsonSerializer.Serialize(output);
-            Assert.Equal(json, json2);
+            Assert.Equal(temp, output);
         }
     }
 }

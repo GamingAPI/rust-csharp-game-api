@@ -111,19 +111,19 @@ namespace Asyncapi.Nats.Client.Models
         }
         if (propertyName == "item_uid")
         {
-          var value = JsonSerializer.Deserialize<int>(ref reader, options);
+          var value = JsonSerializer.Deserialize<int?>(ref reader, options);
           instance.ItemUid = value;
           continue;
         }
         if (propertyName == "item_id")
         {
-          var value = JsonSerializer.Deserialize<int>(ref reader, options);
+          var value = JsonSerializer.Deserialize<int?>(ref reader, options);
           instance.ItemId = value;
           continue;
         }
         if (propertyName == "amount")
         {
-          var value = JsonSerializer.Deserialize<int>(ref reader, options);
+          var value = JsonSerializer.Deserialize<int?>(ref reader, options);
           instance.Amount = value;
           continue;
         }

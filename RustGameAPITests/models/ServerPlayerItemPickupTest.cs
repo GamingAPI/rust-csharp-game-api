@@ -13,8 +13,7 @@ namespace Asyncapi.Nats.Client.Tests
             ServerPlayerItemPickup temp = new ServerPlayerItemPickup();
             string json = JsonSerializer.Serialize(temp);
             ServerPlayerItemPickup output = JsonSerializer.Deserialize<ServerPlayerItemPickup>(json);
-            string json2 = JsonSerializer.Serialize(output);
-            Assert.Equal(json, json2);
+            Assert.Equal(temp, output);
         }
     }
 }

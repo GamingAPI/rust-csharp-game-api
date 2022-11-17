@@ -130,13 +130,13 @@ namespace Asyncapi.Nats.Client.Models
         }
         if (propertyName == "is_admin")
         {
-          var value = JsonSerializer.Deserialize<bool>(ref reader, options);
+          var value = JsonSerializer.Deserialize<bool?>(ref reader, options);
           instance.IsAdmin = value;
           continue;
         }
         if (propertyName == "rank")
         {
-          var value = JsonSerializer.Deserialize<int>(ref reader, options);
+          var value = JsonSerializer.Deserialize<int?>(ref reader, options);
           instance.Rank = value;
           continue;
         }
