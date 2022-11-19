@@ -3,7 +3,6 @@ using System;
 using System.Text;
 using System.Text.Json;
 using Asyncapi.Nats.Client.Models;
-using NATS.Client.JetStream;
 
 namespace Asyncapi.Nats.Client.Channels
 {
@@ -20,24 +19,13 @@ internal static byte[] JsonSerializerSupport(LoggingInterface logger, ServerPlay
 
 public static void Publish(
   LoggingInterface logger,
-IConnection connection,
+IEncodedConnection connection,
 ServerPlayerCombatPlayerhit requestMessage,
 String server_id,String steam_id
 ){
   logger.Debug("Publishing to channel: " + $"v0.rust.servers.{server_id}.players.{steam_id}.events.combat.hit");
   var serializedObject = JsonSerializerSupport(logger, requestMessage); 
-  connection.Publish($"v0.rust.servers.{server_id}.players.{steam_id}.events.combat.hit", serializedObject);
-        }
-        public static void PublishJetStream(
-          LoggingInterface logger,
-        IJetStream connection,
-ServerPlayerCombatPlayerhit requestMessage,
-String server_id, String steam_id
-        )
-        {
-            logger.Debug("Publishing to channel: " + $"v0.rust.servers.{server_id}.players.{steam_id}.events.combat.hit");
-            var serializedObject = JsonSerializerSupport(logger, requestMessage);
-            connection.Publish($"v0.rust.servers.{server_id}.players.{steam_id}.events.combat.hit", serializedObject);
-        }
-    }
+  connection.Publish("v0.rust.servers.{server_id}.players.{steam_id}.events.combat.hit", serializedObject);
+}
+  }
 }

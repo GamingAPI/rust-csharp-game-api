@@ -13,8 +13,7 @@ namespace Asyncapi.Nats.Client.Tests
             ServerPlayerDisconnected temp = new ServerPlayerDisconnected();
             string json = JsonSerializer.Serialize(temp);
             ServerPlayerDisconnected output = JsonSerializer.Deserialize<ServerPlayerDisconnected>(json);
-            string json2 = JsonSerializer.Serialize(output);
-            Assert.Equal(json, json2);
+            Assert.Equal(temp, output);
         }
     }
 }

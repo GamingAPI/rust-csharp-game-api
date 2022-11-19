@@ -64,13 +64,13 @@ namespace Asyncapi.Nats.Client.Models
         string propertyName = reader.GetString();
         if (propertyName == "uid")
         {
-          var value = JsonSerializer.Deserialize<int>(ref reader, options);
+          var value = JsonSerializer.Deserialize<int?>(ref reader, options);
           instance.Uid = value;
           continue;
         }
         if (propertyName == "item_id")
         {
-          var value = JsonSerializer.Deserialize<int>(ref reader, options);
+          var value = JsonSerializer.Deserialize<int?>(ref reader, options);
           instance.ItemId = value;
           continue;
         }

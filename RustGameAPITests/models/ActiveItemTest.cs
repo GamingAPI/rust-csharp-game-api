@@ -13,8 +13,7 @@ namespace Asyncapi.Nats.Client.Tests
             ActiveItem temp = new ActiveItem();
             string json = JsonSerializer.Serialize(temp);
             ActiveItem output = JsonSerializer.Deserialize<ActiveItem>(json);
-            string json2 = JsonSerializer.Serialize(output);
-            Assert.Equal(json, json2);
+            Assert.Equal(temp, output);
         }
     }
 }
