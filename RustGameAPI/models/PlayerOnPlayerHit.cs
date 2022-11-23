@@ -1,9 +1,8 @@
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using System.Text.Json;
-  using System.Text.Json.Serialization;
-  using System.Text.RegularExpressions;
+  using Newtonsoft.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(PlayerOnPlayerHitConverter))]
@@ -60,146 +59,83 @@ namespace Asyncapi.Nats.Client.Models
     }
   }
 
-  internal class PlayerOnPlayerHitConverter : JsonConverter<PlayerOnPlayerHit>
+  public class PlayerOnPlayerHitConverter : JsonConverter<PlayerOnPlayerHit>
   {
-    public override bool CanConvert(System.Type objectType)
-    {
-      // this converter can be applied to any type
-      return true;
-    }
-    public override PlayerOnPlayerHit Read(ref Utf8JsonReader reader, System.Type typeToConvert, JsonSerializerOptions options)
-    {
-      if (reader.TokenType != JsonTokenType.StartObject)
-      {
-        throw new JsonException();
-      }
+    public override PlayerOnPlayerHit ReadJson(JsonReader reader, System.Type objectType, PlayerOnPlayerHit existingValue, bool hasExistingValue, JsonSerializer serializer)
+  {
+    JObject jo = JObject.Load(reader);
+    PlayerOnPlayerHit value = new PlayerOnPlayerHit();
 
-      var instance = new PlayerOnPlayerHit();
-  
-      while (reader.Read())
-      {
-        if (reader.TokenType == JsonTokenType.EndObject)
-        {
-          return instance;
-        }
-
-        // Get the key.
-        if (reader.TokenType != JsonTokenType.PropertyName)
-        {
-          throw new JsonException();
-        }
-
-        string propertyName = reader.GetString();
-        if (propertyName == "hit_area_id")
-        {
-          var value = JsonSerializer.Deserialize<int>(ref reader, options);
-          instance.HitAreaId = value;
-          continue;
-        }
-        if (propertyName == "hit_distance")
-        {
-          var value = JsonSerializer.Deserialize<double>(ref reader, options);
-          instance.HitDistance = value;
-          continue;
-        }
-        if (propertyName == "hit_damage")
-        {
-          var value = JsonSerializer.Deserialize<double>(ref reader, options);
-          instance.HitDamage = value;
-          continue;
-        }
-        if (propertyName == "isKill")
-        {
-          var value = JsonSerializer.Deserialize<bool>(ref reader, options);
-          instance.IsKill = value;
-          continue;
-        }
-        if (propertyName == "victim")
-        {
-          var value = JsonSerializer.Deserialize<PlayerHit>(ref reader, options);
-          instance.Victim = value;
-          continue;
-        }
-        if (propertyName == "attacker")
-        {
-          var value = JsonSerializer.Deserialize<PlayerHit>(ref reader, options);
-          instance.Attacker = value;
-          continue;
-        }
-
-    
-
-        if(instance.AdditionalProperties == null) { instance.AdditionalProperties = new Dictionary<string, dynamic>(); }
-        var deserializedValue = JsonSerializer.Deserialize<dynamic>(ref reader, options);
-        instance.AdditionalProperties.Add(propertyName, deserializedValue);
-        continue;
-      }
-  
-      throw new JsonException();
-    }
-    public override void Write(Utf8JsonWriter writer, PlayerOnPlayerHit value, JsonSerializerOptions options)
-    {
-      if (value == null)
-      {
-        JsonSerializer.Serialize(writer, null, options);
-        return;
-      }
-      var properties = value.GetType().GetProperties().Where(prop => prop.Name != "AdditionalProperties");
-  
-      writer.WriteStartObject();
-
-      if(value.HitAreaId != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("hit_area_id");
-        JsonSerializer.Serialize(writer, value.HitAreaId, options);
-      }
-      if(value.HitDistance != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("hit_distance");
-        JsonSerializer.Serialize(writer, value.HitDistance, options);
-      }
-      if(value.HitDamage != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("hit_damage");
-        JsonSerializer.Serialize(writer, value.HitDamage, options);
-      }
-      if(value.IsKill != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("isKill");
-        JsonSerializer.Serialize(writer, value.IsKill, options);
-      }
-      if(value.Victim != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("victim");
-        JsonSerializer.Serialize(writer, value.Victim, options);
-      }
-      if(value.Attacker != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("attacker");
-        JsonSerializer.Serialize(writer, value.Attacker, options);
-      }
-
-
-  
-
-      // Unwrap additional properties in object
-      if (value.AdditionalProperties != null) {
-        foreach (var additionalProperty in value.AdditionalProperties)
-        {
-          //Ignore any additional properties which might already be part of the core properties
-          if (properties.Any(prop => prop.Name == additionalProperty.Key))
-          {
-              continue;
-          }
-          // write property name and let the serializer serialize the value itself
-          writer.WritePropertyName(additionalProperty.Key);
-          JsonSerializer.Serialize(writer, additionalProperty.Value, options);
-        }
-      }
-
-      writer.WriteEndObject();
-    }
-
+    if(jo["hit_area_id"] != null) {
+    value.HitAreaId = jo["hit_area_id"].ToObject<int>(serializer);
+  }
+  if(jo["hit_distance"] != null) {
+    value.HitDistance = jo["hit_distance"].ToObject<double>(serializer);
+  }
+  if(jo["hit_damage"] != null) {
+    value.HitDamage = jo["hit_damage"].ToObject<double>(serializer);
+  }
+  if(jo["isKill"] != null) {
+    value.IsKill = jo["isKill"].ToObject<bool>(serializer);
+  }
+  if(jo["victim"] != null) {
+    value.Victim = jo["victim"].ToObject<PlayerHit>(serializer);
+  }
+  if(jo["attacker"] != null) {
+    value.Attacker = jo["attacker"].ToObject<PlayerHit>(serializer);
   }
 
+    var additionalProperties = jo.Properties().Where((prop) => prop.Name != "hit_area_id" || prop.Name != "hit_distance" || prop.Name != "hit_damage" || prop.Name != "isKill" || prop.Name != "victim" || prop.Name != "attacker");
+    value.AdditionalProperties = new Dictionary<string, dynamic>();
+
+    foreach (var additionalProperty in additionalProperties)
+    {
+      value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<dynamic>(serializer);
+    }
+    return value;
+  }
+    public override void WriteJson(JsonWriter writer, PlayerOnPlayerHit value, JsonSerializer serializer)
+  {
+    JObject jo = new JObject();
+
+    if (value.HitAreaId != null)
+  {
+    jo.Add("hit_area_id", JToken.FromObject(value.HitAreaId, serializer));
+  }
+  if (value.HitDistance != null)
+  {
+    jo.Add("hit_distance", JToken.FromObject(value.HitDistance, serializer));
+  }
+  if (value.HitDamage != null)
+  {
+    jo.Add("hit_damage", JToken.FromObject(value.HitDamage, serializer));
+  }
+  if (value.IsKill != null)
+  {
+    jo.Add("isKill", JToken.FromObject(value.IsKill, serializer));
+  }
+  if (value.Victim != null)
+  {
+    jo.Add("victim", JToken.FromObject(value.Victim, serializer));
+  }
+  if (value.Attacker != null)
+  {
+    jo.Add("attacker", JToken.FromObject(value.Attacker, serializer));
+  }
+    if (value.AdditionalProperties != null)
+    {
+    foreach (var unwrapProperty in value.AdditionalProperties)
+    {
+      var hasProp = jo[unwrapProperty.Key]; 
+      if (hasProp != null) continue;
+      jo.Add(unwrapProperty.Key, JToken.FromObject(unwrapProperty.Value, serializer));
+    }
+  }
+
+    jo.WriteTo(writer);
+  }
+
+    public override bool CanRead => true;
+    public override bool CanWrite => true;
+  }
 }

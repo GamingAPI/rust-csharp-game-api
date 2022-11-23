@@ -1,9 +1,8 @@
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using System.Text.Json;
-  using System.Text.Json.Serialization;
-  using System.Text.RegularExpressions;
+  using Newtonsoft.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(ServerPlayerBannedConverter))]
@@ -53,135 +52,76 @@ namespace Asyncapi.Nats.Client.Models
     }
   }
 
-  internal class ServerPlayerBannedConverter : JsonConverter<ServerPlayerBanned>
+  public class ServerPlayerBannedConverter : JsonConverter<ServerPlayerBanned>
   {
-    public override bool CanConvert(System.Type objectType)
-    {
-      // this converter can be applied to any type
-      return true;
-    }
-    public override ServerPlayerBanned Read(ref Utf8JsonReader reader, System.Type typeToConvert, JsonSerializerOptions options)
-    {
-      if (reader.TokenType != JsonTokenType.StartObject)
-      {
-        throw new JsonException();
-      }
+    public override ServerPlayerBanned ReadJson(JsonReader reader, System.Type objectType, ServerPlayerBanned existingValue, bool hasExistingValue, JsonSerializer serializer)
+  {
+    JObject jo = JObject.Load(reader);
+    ServerPlayerBanned value = new ServerPlayerBanned();
 
-      var instance = new ServerPlayerBanned();
-  
-      while (reader.Read())
-      {
-        if (reader.TokenType == JsonTokenType.EndObject)
-        {
-          return instance;
-        }
-
-        // Get the key.
-        if (reader.TokenType != JsonTokenType.PropertyName)
-        {
-          throw new JsonException();
-        }
-
-        string propertyName = reader.GetString();
-        if (propertyName == "player_name")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.PlayerName = value;
-          continue;
-        }
-        if (propertyName == "steam_id")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.SteamId = value;
-          continue;
-        }
-        if (propertyName == "reason")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.Reason = value;
-          continue;
-        }
-        if (propertyName == "duration")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.Duration = value;
-          continue;
-        }
-        if (propertyName == "timestamp")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.Timestamp = value;
-          continue;
-        }
-
-    
-
-        if(instance.AdditionalProperties == null) { instance.AdditionalProperties = new Dictionary<string, dynamic>(); }
-        var deserializedValue = JsonSerializer.Deserialize<dynamic>(ref reader, options);
-        instance.AdditionalProperties.Add(propertyName, deserializedValue);
-        continue;
-      }
-  
-      throw new JsonException();
-    }
-    public override void Write(Utf8JsonWriter writer, ServerPlayerBanned value, JsonSerializerOptions options)
-    {
-      if (value == null)
-      {
-        JsonSerializer.Serialize(writer, null, options);
-        return;
-      }
-      var properties = value.GetType().GetProperties().Where(prop => prop.Name != "AdditionalProperties");
-  
-      writer.WriteStartObject();
-
-      if(value.PlayerName != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("player_name");
-        JsonSerializer.Serialize(writer, value.PlayerName, options);
-      }
-      if(value.SteamId != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("steam_id");
-        JsonSerializer.Serialize(writer, value.SteamId, options);
-      }
-      if(value.Reason != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("reason");
-        JsonSerializer.Serialize(writer, value.Reason, options);
-      }
-      if(value.Duration != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("duration");
-        JsonSerializer.Serialize(writer, value.Duration, options);
-      }
-      if(value.Timestamp != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("timestamp");
-        JsonSerializer.Serialize(writer, value.Timestamp, options);
-      }
-
-
-  
-
-      // Unwrap additional properties in object
-      if (value.AdditionalProperties != null) {
-        foreach (var additionalProperty in value.AdditionalProperties)
-        {
-          //Ignore any additional properties which might already be part of the core properties
-          if (properties.Any(prop => prop.Name == additionalProperty.Key))
-          {
-              continue;
-          }
-          // write property name and let the serializer serialize the value itself
-          writer.WritePropertyName(additionalProperty.Key);
-          JsonSerializer.Serialize(writer, additionalProperty.Value, options);
-        }
-      }
-
-      writer.WriteEndObject();
-    }
-
+    if(jo["player_name"] != null) {
+    value.PlayerName = jo["player_name"].ToObject<string>(serializer);
+  }
+  if(jo["steam_id"] != null) {
+    value.SteamId = jo["steam_id"].ToObject<string>(serializer);
+  }
+  if(jo["reason"] != null) {
+    value.Reason = jo["reason"].ToObject<string>(serializer);
+  }
+  if(jo["duration"] != null) {
+    value.Duration = jo["duration"].ToObject<string>(serializer);
+  }
+  if(jo["timestamp"] != null) {
+    value.Timestamp = jo["timestamp"].ToObject<string>(serializer);
   }
 
+    var additionalProperties = jo.Properties().Where((prop) => prop.Name != "player_name" || prop.Name != "steam_id" || prop.Name != "reason" || prop.Name != "duration" || prop.Name != "timestamp");
+    value.AdditionalProperties = new Dictionary<string, dynamic>();
+
+    foreach (var additionalProperty in additionalProperties)
+    {
+      value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<dynamic>(serializer);
+    }
+    return value;
+  }
+    public override void WriteJson(JsonWriter writer, ServerPlayerBanned value, JsonSerializer serializer)
+  {
+    JObject jo = new JObject();
+
+    if (value.PlayerName != null)
+  {
+    jo.Add("player_name", JToken.FromObject(value.PlayerName, serializer));
+  }
+  if (value.SteamId != null)
+  {
+    jo.Add("steam_id", JToken.FromObject(value.SteamId, serializer));
+  }
+  if (value.Reason != null)
+  {
+    jo.Add("reason", JToken.FromObject(value.Reason, serializer));
+  }
+  if (value.Duration != null)
+  {
+    jo.Add("duration", JToken.FromObject(value.Duration, serializer));
+  }
+  if (value.Timestamp != null)
+  {
+    jo.Add("timestamp", JToken.FromObject(value.Timestamp, serializer));
+  }
+    if (value.AdditionalProperties != null)
+    {
+    foreach (var unwrapProperty in value.AdditionalProperties)
+    {
+      var hasProp = jo[unwrapProperty.Key]; 
+      if (hasProp != null) continue;
+      jo.Add(unwrapProperty.Key, JToken.FromObject(unwrapProperty.Value, serializer));
+    }
+  }
+
+    jo.WriteTo(writer);
+  }
+
+    public override bool CanRead => true;
+    public override bool CanWrite => true;
+  }
 }

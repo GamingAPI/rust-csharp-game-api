@@ -1,9 +1,8 @@
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using System.Text.Json;
-  using System.Text.Json.Serialization;
-  using System.Text.RegularExpressions;
+  using Newtonsoft.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(ServerPlayerReportedConverter))]
@@ -60,146 +59,83 @@ namespace Asyncapi.Nats.Client.Models
     }
   }
 
-  internal class ServerPlayerReportedConverter : JsonConverter<ServerPlayerReported>
+  public class ServerPlayerReportedConverter : JsonConverter<ServerPlayerReported>
   {
-    public override bool CanConvert(System.Type objectType)
-    {
-      // this converter can be applied to any type
-      return true;
-    }
-    public override ServerPlayerReported Read(ref Utf8JsonReader reader, System.Type typeToConvert, JsonSerializerOptions options)
-    {
-      if (reader.TokenType != JsonTokenType.StartObject)
-      {
-        throw new JsonException();
-      }
+    public override ServerPlayerReported ReadJson(JsonReader reader, System.Type objectType, ServerPlayerReported existingValue, bool hasExistingValue, JsonSerializer serializer)
+  {
+    JObject jo = JObject.Load(reader);
+    ServerPlayerReported value = new ServerPlayerReported();
 
-      var instance = new ServerPlayerReported();
-  
-      while (reader.Read())
-      {
-        if (reader.TokenType == JsonTokenType.EndObject)
-        {
-          return instance;
-        }
-
-        // Get the key.
-        if (reader.TokenType != JsonTokenType.PropertyName)
-        {
-          throw new JsonException();
-        }
-
-        string propertyName = reader.GetString();
-        if (propertyName == "reporter_steam_id")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.ReporterSteamId = value;
-          continue;
-        }
-        if (propertyName == "reported_target_steam_id")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.ReportedTargetSteamId = value;
-          continue;
-        }
-        if (propertyName == "subject")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.Subject = value;
-          continue;
-        }
-        if (propertyName == "message")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.Message = value;
-          continue;
-        }
-        if (propertyName == "reportedType")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.ReportedType = value;
-          continue;
-        }
-        if (propertyName == "timestamp")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.Timestamp = value;
-          continue;
-        }
-
-    
-
-        if(instance.AdditionalProperties == null) { instance.AdditionalProperties = new Dictionary<string, dynamic>(); }
-        var deserializedValue = JsonSerializer.Deserialize<dynamic>(ref reader, options);
-        instance.AdditionalProperties.Add(propertyName, deserializedValue);
-        continue;
-      }
-  
-      throw new JsonException();
-    }
-    public override void Write(Utf8JsonWriter writer, ServerPlayerReported value, JsonSerializerOptions options)
-    {
-      if (value == null)
-      {
-        JsonSerializer.Serialize(writer, null, options);
-        return;
-      }
-      var properties = value.GetType().GetProperties().Where(prop => prop.Name != "AdditionalProperties");
-  
-      writer.WriteStartObject();
-
-      if(value.ReporterSteamId != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("reporter_steam_id");
-        JsonSerializer.Serialize(writer, value.ReporterSteamId, options);
-      }
-      if(value.ReportedTargetSteamId != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("reported_target_steam_id");
-        JsonSerializer.Serialize(writer, value.ReportedTargetSteamId, options);
-      }
-      if(value.Subject != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("subject");
-        JsonSerializer.Serialize(writer, value.Subject, options);
-      }
-      if(value.Message != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("message");
-        JsonSerializer.Serialize(writer, value.Message, options);
-      }
-      if(value.ReportedType != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("reportedType");
-        JsonSerializer.Serialize(writer, value.ReportedType, options);
-      }
-      if(value.Timestamp != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("timestamp");
-        JsonSerializer.Serialize(writer, value.Timestamp, options);
-      }
-
-
-  
-
-      // Unwrap additional properties in object
-      if (value.AdditionalProperties != null) {
-        foreach (var additionalProperty in value.AdditionalProperties)
-        {
-          //Ignore any additional properties which might already be part of the core properties
-          if (properties.Any(prop => prop.Name == additionalProperty.Key))
-          {
-              continue;
-          }
-          // write property name and let the serializer serialize the value itself
-          writer.WritePropertyName(additionalProperty.Key);
-          JsonSerializer.Serialize(writer, additionalProperty.Value, options);
-        }
-      }
-
-      writer.WriteEndObject();
-    }
-
+    if(jo["reporter_steam_id"] != null) {
+    value.ReporterSteamId = jo["reporter_steam_id"].ToObject<string>(serializer);
+  }
+  if(jo["reported_target_steam_id"] != null) {
+    value.ReportedTargetSteamId = jo["reported_target_steam_id"].ToObject<string>(serializer);
+  }
+  if(jo["subject"] != null) {
+    value.Subject = jo["subject"].ToObject<string>(serializer);
+  }
+  if(jo["message"] != null) {
+    value.Message = jo["message"].ToObject<string>(serializer);
+  }
+  if(jo["reportedType"] != null) {
+    value.ReportedType = jo["reportedType"].ToObject<string>(serializer);
+  }
+  if(jo["timestamp"] != null) {
+    value.Timestamp = jo["timestamp"].ToObject<string>(serializer);
   }
 
+    var additionalProperties = jo.Properties().Where((prop) => prop.Name != "reporter_steam_id" || prop.Name != "reported_target_steam_id" || prop.Name != "subject" || prop.Name != "message" || prop.Name != "reportedType" || prop.Name != "timestamp");
+    value.AdditionalProperties = new Dictionary<string, dynamic>();
+
+    foreach (var additionalProperty in additionalProperties)
+    {
+      value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<dynamic>(serializer);
+    }
+    return value;
+  }
+    public override void WriteJson(JsonWriter writer, ServerPlayerReported value, JsonSerializer serializer)
+  {
+    JObject jo = new JObject();
+
+    if (value.ReporterSteamId != null)
+  {
+    jo.Add("reporter_steam_id", JToken.FromObject(value.ReporterSteamId, serializer));
+  }
+  if (value.ReportedTargetSteamId != null)
+  {
+    jo.Add("reported_target_steam_id", JToken.FromObject(value.ReportedTargetSteamId, serializer));
+  }
+  if (value.Subject != null)
+  {
+    jo.Add("subject", JToken.FromObject(value.Subject, serializer));
+  }
+  if (value.Message != null)
+  {
+    jo.Add("message", JToken.FromObject(value.Message, serializer));
+  }
+  if (value.ReportedType != null)
+  {
+    jo.Add("reportedType", JToken.FromObject(value.ReportedType, serializer));
+  }
+  if (value.Timestamp != null)
+  {
+    jo.Add("timestamp", JToken.FromObject(value.Timestamp, serializer));
+  }
+    if (value.AdditionalProperties != null)
+    {
+    foreach (var unwrapProperty in value.AdditionalProperties)
+    {
+      var hasProp = jo[unwrapProperty.Key]; 
+      if (hasProp != null) continue;
+      jo.Add(unwrapProperty.Key, JToken.FromObject(unwrapProperty.Value, serializer));
+    }
+  }
+
+    jo.WriteTo(writer);
+  }
+
+    public override bool CanRead => true;
+    public override bool CanWrite => true;
+  }
 }

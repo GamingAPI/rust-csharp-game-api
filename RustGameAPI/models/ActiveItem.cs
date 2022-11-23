@@ -1,25 +1,24 @@
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using System.Text.Json;
-  using System.Text.Json.Serialization;
-  using System.Text.RegularExpressions;
+  using Newtonsoft.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(ActiveItemConverter))]
   public class ActiveItem
   {
-    private int? uid;
-    private int? itemId;
+    private int uid;
+    private int itemId;
     private Dictionary<string, dynamic> additionalProperties;
 
-    public int? Uid 
+    public int Uid 
     {
       get { return uid; }
       set { uid = value; }
     }
 
-    public int? ItemId 
+    public int ItemId 
     {
       get { return itemId; }
       set { itemId = value; }
@@ -32,102 +31,55 @@ namespace Asyncapi.Nats.Client.Models
     }
   }
 
-  internal class ActiveItemConverter : JsonConverter<ActiveItem>
+  public class ActiveItemConverter : JsonConverter<ActiveItem>
   {
-    public override bool CanConvert(System.Type objectType)
-    {
-      // this converter can be applied to any type
-      return true;
-    }
-    public override ActiveItem Read(ref Utf8JsonReader reader, System.Type typeToConvert, JsonSerializerOptions options)
-    {
-      if (reader.TokenType != JsonTokenType.StartObject)
-      {
-        throw new JsonException();
-      }
+    public override ActiveItem ReadJson(JsonReader reader, System.Type objectType, ActiveItem existingValue, bool hasExistingValue, JsonSerializer serializer)
+  {
+    JObject jo = JObject.Load(reader);
+    ActiveItem value = new ActiveItem();
 
-      var instance = new ActiveItem();
-  
-      while (reader.Read())
-      {
-        if (reader.TokenType == JsonTokenType.EndObject)
-        {
-          return instance;
-        }
-
-        // Get the key.
-        if (reader.TokenType != JsonTokenType.PropertyName)
-        {
-          throw new JsonException();
-        }
-
-        string propertyName = reader.GetString();
-        if (propertyName == "uid")
-        {
-          var value = JsonSerializer.Deserialize<int>(ref reader, options);
-          instance.Uid = value;
-          continue;
-        }
-        if (propertyName == "item_id")
-        {
-          var value = JsonSerializer.Deserialize<int>(ref reader, options);
-          instance.ItemId = value;
-          continue;
-        }
-
-    
-
-        if(instance.AdditionalProperties == null) { instance.AdditionalProperties = new Dictionary<string, dynamic>(); }
-        var deserializedValue = JsonSerializer.Deserialize<dynamic>(ref reader, options);
-        instance.AdditionalProperties.Add(propertyName, deserializedValue);
-        continue;
-      }
-  
-      throw new JsonException();
-    }
-    public override void Write(Utf8JsonWriter writer, ActiveItem value, JsonSerializerOptions options)
-    {
-      if (value == null)
-      {
-        JsonSerializer.Serialize(writer, null, options);
-        return;
-      }
-      var properties = value.GetType().GetProperties().Where(prop => prop.Name != "AdditionalProperties");
-  
-      writer.WriteStartObject();
-
-      if(value.Uid != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("uid");
-        JsonSerializer.Serialize(writer, value.Uid, options);
-      }
-      if(value.ItemId != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("item_id");
-        JsonSerializer.Serialize(writer, value.ItemId, options);
-      }
-
-
-  
-
-      // Unwrap additional properties in object
-      if (value.AdditionalProperties != null) {
-        foreach (var additionalProperty in value.AdditionalProperties)
-        {
-          //Ignore any additional properties which might already be part of the core properties
-          if (properties.Any(prop => prop.Name == additionalProperty.Key))
-          {
-              continue;
-          }
-          // write property name and let the serializer serialize the value itself
-          writer.WritePropertyName(additionalProperty.Key);
-          JsonSerializer.Serialize(writer, additionalProperty.Value, options);
-        }
-      }
-
-      writer.WriteEndObject();
-    }
-
+    if(jo["uid"] != null) {
+    value.Uid = jo["uid"].ToObject<int>(serializer);
+  }
+  if(jo["item_id"] != null) {
+    value.ItemId = jo["item_id"].ToObject<int>(serializer);
   }
 
+    var additionalProperties = jo.Properties().Where((prop) => prop.Name != "uid" || prop.Name != "item_id");
+    value.AdditionalProperties = new Dictionary<string, dynamic>();
+
+    foreach (var additionalProperty in additionalProperties)
+    {
+      value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<dynamic>(serializer);
+    }
+    return value;
+  }
+    public override void WriteJson(JsonWriter writer, ActiveItem value, JsonSerializer serializer)
+  {
+    JObject jo = new JObject();
+
+    if (value.Uid != null)
+  {
+    jo.Add("uid", JToken.FromObject(value.Uid, serializer));
+  }
+  if (value.ItemId != null)
+  {
+    jo.Add("item_id", JToken.FromObject(value.ItemId, serializer));
+  }
+    if (value.AdditionalProperties != null)
+    {
+    foreach (var unwrapProperty in value.AdditionalProperties)
+    {
+      var hasProp = jo[unwrapProperty.Key]; 
+      if (hasProp != null) continue;
+      jo.Add(unwrapProperty.Key, JToken.FromObject(unwrapProperty.Value, serializer));
+    }
+  }
+
+    jo.WriteTo(writer);
+  }
+
+    public override bool CanRead => true;
+    public override bool CanWrite => true;
+  }
 }

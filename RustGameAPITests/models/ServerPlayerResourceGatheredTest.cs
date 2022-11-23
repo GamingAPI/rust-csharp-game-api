@@ -1,6 +1,7 @@
 
-using System.Text.Json;
 using Asyncapi.Nats.Client.Models;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Asyncapi.Nats.Client.Tests
@@ -10,11 +11,11 @@ namespace Asyncapi.Nats.Client.Tests
         [Fact]
         public void ShouldSerializeAndDeserializeAccurately()
         {
-            ServerPlayerResourceGathered temp = new ServerPlayerResourceGathered();
-            string json = JsonSerializer.Serialize(temp);
-            ServerPlayerResourceGathered output = JsonSerializer.Deserialize<ServerPlayerResourceGathered>(json);
-            string json2 = JsonSerializer.Serialize(output);
-            Assert.Equal(json, json2);
+            ServerPlayerResourceGathered temp = new ServerPlayerResourceGathered();            
+            string json1 = JsonConvert.SerializeObject(temp, Formatting.Indented, new ServerPlayerResourceGatheredConverter());
+            ServerPlayerResourceGathered output = JsonConvert.DeserializeObject<ServerPlayerResourceGathered>(json1, new ServerPlayerResourceGatheredConverter());
+            string json2 = JsonConvert.SerializeObject(output, Formatting.Indented, new ServerPlayerResourceGatheredConverter());
+            Assert.Equal(json1, json2);
         }
     }
 }

@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 # Cleanup potential old files
 [ -d "./tooling" ] && rm -rf ./tooling
@@ -51,9 +51,9 @@ semver_template_current_version=( ${template_current_version//./ } )
 major_template_current_version=${semver_template_current_version[0]}
 minor_template_current_version=${semver_template_current_version[1]}
 patch_template_current_version=${semver_template_current_version[2]}
-if [[ $major_template_current_version > $major_template_last_version ]]; then major_template_change="true"; else major_template_change="false"; fi
-if [[ $minor_template_current_version > $minor_template_last_version ]]; then minor_template_change="true"; else minor_template_change="false"; fi
-if [[ $patch_template_current_version > $patch_template_last_version ]]; then patch_template_change="true"; else patch_template_change="false"; fi
+if (( $major_template_current_version > $major_template_last_version )); then major_template_change="true"; else major_template_change="false"; fi
+if (( $minor_template_current_version > $minor_template_last_version )); then minor_template_change="true"; else minor_template_change="false"; fi
+if (( $patch_template_current_version > $patch_template_last_version )); then patch_template_change="true"; else patch_template_change="false"; fi
 
 # Split the last used AsyncAPI document version by '.' to split it up into 'major.minor.fix'
 semver_document_last_version=( ${document_last_version//./ } )
@@ -65,9 +65,9 @@ semver_document_current_version=( ${document_current_version//./ } )
 major_document_current_version=${semver_document_current_version[0]}
 minor_document_current_version=${semver_document_current_version[1]}
 patch_document_current_version=${semver_document_current_version[2]}
-if [[ $major_document_current_version > $major_document_last_version ]]; then major_document_change="true"; else major_document_change="false"; fi
-if [[ $minor_document_current_version > $minor_document_last_version ]]; then minor_document_change="true"; else minor_document_change="false"; fi
-if [[ $patch_document_current_version > $patch_document_last_version ]]; then patch_document_change="true"; else patch_document_change="false"; fi
+if (( $major_document_current_version > $major_document_last_version )); then major_document_change="true"; else major_document_change="false"; fi
+if (( $minor_document_current_version > $minor_document_last_version )); then minor_document_change="true"; else minor_document_change="false"; fi
+if (( $patch_document_current_version > $patch_document_last_version )); then patch_document_change="true"; else patch_document_change="false"; fi
 
 # Set the commit messages that details what changed
 if [ $major_template_change == "true" ]; then
@@ -103,7 +103,7 @@ if [ $major_version_change == "true" ] || [ $minor_version_change == "true" ] ||
     npm install -g @asyncapi/generator
   fi
   # Generating new code from the AsyncAPI document
-  ag --force-write --output ./ ${url_to_asyncapi_document} https://github.com/${template_to_use} -p version="${library_last_version}" -p targetFramework="netstandard2.0;netstandard2.1;net461" -p repositoryUrl="${repository_url}" -p projectName="${libary_name}" -p packageVersion="${library_last_version}" -p assemblyVersion="${library_last_version}.0" -p fileVersion="${library_last_version}.0"
+  ag --force-write --output ./ ${url_to_asyncapi_document} https://github.com/${template_to_use} -p version="${library_last_version}" -p targetFramework="net46;net48;netstandard2.0;netstandard2.1" -p repositoryUrl="${repository_url}" -p projectName="${libary_name}" -p packageVersion="${library_last_version}" -p serializationLibrary="newtonsoft" -p assemblyVersion="${library_last_version}.0" -p fileVersion="${library_last_version}.0"
 
   # Write new config file to ensure we keep the new state for next time
   contents="$(jq ".template_last_version = \"$template_current_version\" | .document_last_version = \"$document_current_version\"" configs.json)" && echo "${contents}" > configs.json

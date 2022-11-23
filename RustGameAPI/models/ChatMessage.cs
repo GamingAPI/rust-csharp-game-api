@@ -1,9 +1,8 @@
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using System.Text.Json;
-  using System.Text.Json.Serialization;
-  using System.Text.RegularExpressions;
+  using Newtonsoft.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(ChatMessageConverter))]
@@ -14,7 +13,7 @@ namespace Asyncapi.Nats.Client.Models
     private string rawMessage;
     private string fullMessage;
     private bool isAdmin;
-    private int? rank;
+    private int rank;
     private string title;
     private string timestamp;
     private Dictionary<string, dynamic> additionalProperties;
@@ -49,7 +48,7 @@ namespace Asyncapi.Nats.Client.Models
       set { isAdmin = value; }
     }
 
-    public int? Rank 
+    public int Rank 
     {
       get { return rank; }
       set { rank = value; }
@@ -74,168 +73,97 @@ namespace Asyncapi.Nats.Client.Models
     }
   }
 
-  internal class ChatMessageConverter : JsonConverter<ChatMessage>
+  public class ChatMessageConverter : JsonConverter<ChatMessage>
   {
-    public override bool CanConvert(System.Type objectType)
-    {
-      // this converter can be applied to any type
-      return true;
-    }
-    public override ChatMessage Read(ref Utf8JsonReader reader, System.Type typeToConvert, JsonSerializerOptions options)
-    {
-      if (reader.TokenType != JsonTokenType.StartObject)
-      {
-        throw new JsonException();
-      }
+    public override ChatMessage ReadJson(JsonReader reader, System.Type objectType, ChatMessage existingValue, bool hasExistingValue, JsonSerializer serializer)
+  {
+    JObject jo = JObject.Load(reader);
+    ChatMessage value = new ChatMessage();
 
-      var instance = new ChatMessage();
-  
-      while (reader.Read())
-      {
-        if (reader.TokenType == JsonTokenType.EndObject)
-        {
-          return instance;
-        }
-
-        // Get the key.
-        if (reader.TokenType != JsonTokenType.PropertyName)
-        {
-          throw new JsonException();
-        }
-
-        string propertyName = reader.GetString();
-        if (propertyName == "steam_id")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.SteamId = value;
-          continue;
-        }
-        if (propertyName == "player_name")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.PlayerName = value;
-          continue;
-        }
-        if (propertyName == "raw_message")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.RawMessage = value;
-          continue;
-        }
-        if (propertyName == "full_message")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.FullMessage = value;
-          continue;
-        }
-        if (propertyName == "is_admin")
-        {
-          var value = JsonSerializer.Deserialize<bool>(ref reader, options);
-          instance.IsAdmin = value;
-          continue;
-        }
-        if (propertyName == "rank")
-        {
-          var value = JsonSerializer.Deserialize<int>(ref reader, options);
-          instance.Rank = value;
-          continue;
-        }
-        if (propertyName == "title")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.Title = value;
-          continue;
-        }
-        if (propertyName == "timestamp")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.Timestamp = value;
-          continue;
-        }
-
-    
-
-        if(instance.AdditionalProperties == null) { instance.AdditionalProperties = new Dictionary<string, dynamic>(); }
-        var deserializedValue = JsonSerializer.Deserialize<dynamic>(ref reader, options);
-        instance.AdditionalProperties.Add(propertyName, deserializedValue);
-        continue;
-      }
-  
-      throw new JsonException();
-    }
-    public override void Write(Utf8JsonWriter writer, ChatMessage value, JsonSerializerOptions options)
-    {
-      if (value == null)
-      {
-        JsonSerializer.Serialize(writer, null, options);
-        return;
-      }
-      var properties = value.GetType().GetProperties().Where(prop => prop.Name != "AdditionalProperties");
-  
-      writer.WriteStartObject();
-
-      if(value.SteamId != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("steam_id");
-        JsonSerializer.Serialize(writer, value.SteamId, options);
-      }
-      if(value.PlayerName != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("player_name");
-        JsonSerializer.Serialize(writer, value.PlayerName, options);
-      }
-      if(value.RawMessage != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("raw_message");
-        JsonSerializer.Serialize(writer, value.RawMessage, options);
-      }
-      if(value.FullMessage != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("full_message");
-        JsonSerializer.Serialize(writer, value.FullMessage, options);
-      }
-      if(value.IsAdmin != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("is_admin");
-        JsonSerializer.Serialize(writer, value.IsAdmin, options);
-      }
-      if(value.Rank != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("rank");
-        JsonSerializer.Serialize(writer, value.Rank, options);
-      }
-      if(value.Title != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("title");
-        JsonSerializer.Serialize(writer, value.Title, options);
-      }
-      if(value.Timestamp != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("timestamp");
-        JsonSerializer.Serialize(writer, value.Timestamp, options);
-      }
-
-
-  
-
-      // Unwrap additional properties in object
-      if (value.AdditionalProperties != null) {
-        foreach (var additionalProperty in value.AdditionalProperties)
-        {
-          //Ignore any additional properties which might already be part of the core properties
-          if (properties.Any(prop => prop.Name == additionalProperty.Key))
-          {
-              continue;
-          }
-          // write property name and let the serializer serialize the value itself
-          writer.WritePropertyName(additionalProperty.Key);
-          JsonSerializer.Serialize(writer, additionalProperty.Value, options);
-        }
-      }
-
-      writer.WriteEndObject();
-    }
-
+    if(jo["steam_id"] != null) {
+    value.SteamId = jo["steam_id"].ToObject<string>(serializer);
+  }
+  if(jo["player_name"] != null) {
+    value.PlayerName = jo["player_name"].ToObject<string>(serializer);
+  }
+  if(jo["raw_message"] != null) {
+    value.RawMessage = jo["raw_message"].ToObject<string>(serializer);
+  }
+  if(jo["full_message"] != null) {
+    value.FullMessage = jo["full_message"].ToObject<string>(serializer);
+  }
+  if(jo["is_admin"] != null) {
+    value.IsAdmin = jo["is_admin"].ToObject<bool>(serializer);
+  }
+  if(jo["rank"] != null) {
+    value.Rank = jo["rank"].ToObject<int>(serializer);
+  }
+  if(jo["title"] != null) {
+    value.Title = jo["title"].ToObject<string>(serializer);
+  }
+  if(jo["timestamp"] != null) {
+    value.Timestamp = jo["timestamp"].ToObject<string>(serializer);
   }
 
+    var additionalProperties = jo.Properties().Where((prop) => prop.Name != "steam_id" || prop.Name != "player_name" || prop.Name != "raw_message" || prop.Name != "full_message" || prop.Name != "is_admin" || prop.Name != "rank" || prop.Name != "title" || prop.Name != "timestamp");
+    value.AdditionalProperties = new Dictionary<string, dynamic>();
+
+    foreach (var additionalProperty in additionalProperties)
+    {
+      value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<dynamic>(serializer);
+    }
+    return value;
+  }
+    public override void WriteJson(JsonWriter writer, ChatMessage value, JsonSerializer serializer)
+  {
+    JObject jo = new JObject();
+
+    if (value.SteamId != null)
+  {
+    jo.Add("steam_id", JToken.FromObject(value.SteamId, serializer));
+  }
+  if (value.PlayerName != null)
+  {
+    jo.Add("player_name", JToken.FromObject(value.PlayerName, serializer));
+  }
+  if (value.RawMessage != null)
+  {
+    jo.Add("raw_message", JToken.FromObject(value.RawMessage, serializer));
+  }
+  if (value.FullMessage != null)
+  {
+    jo.Add("full_message", JToken.FromObject(value.FullMessage, serializer));
+  }
+  if (value.IsAdmin != null)
+  {
+    jo.Add("is_admin", JToken.FromObject(value.IsAdmin, serializer));
+  }
+  if (value.Rank != null)
+  {
+    jo.Add("rank", JToken.FromObject(value.Rank, serializer));
+  }
+  if (value.Title != null)
+  {
+    jo.Add("title", JToken.FromObject(value.Title, serializer));
+  }
+  if (value.Timestamp != null)
+  {
+    jo.Add("timestamp", JToken.FromObject(value.Timestamp, serializer));
+  }
+    if (value.AdditionalProperties != null)
+    {
+    foreach (var unwrapProperty in value.AdditionalProperties)
+    {
+      var hasProp = jo[unwrapProperty.Key]; 
+      if (hasProp != null) continue;
+      jo.Add(unwrapProperty.Key, JToken.FromObject(unwrapProperty.Value, serializer));
+    }
+  }
+
+    jo.WriteTo(writer);
+  }
+
+    public override bool CanRead => true;
+    public override bool CanWrite => true;
+  }
 }

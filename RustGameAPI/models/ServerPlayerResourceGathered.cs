@@ -1,9 +1,8 @@
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using System.Text.Json;
-  using System.Text.Json.Serialization;
-  using System.Text.RegularExpressions;
+  using Newtonsoft.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(ServerPlayerResourceGatheredConverter))]
@@ -67,157 +66,90 @@ namespace Asyncapi.Nats.Client.Models
     }
   }
 
-  internal class ServerPlayerResourceGatheredConverter : JsonConverter<ServerPlayerResourceGathered>
+  public class ServerPlayerResourceGatheredConverter : JsonConverter<ServerPlayerResourceGathered>
   {
-    public override bool CanConvert(System.Type objectType)
-    {
-      // this converter can be applied to any type
-      return true;
-    }
-    public override ServerPlayerResourceGathered Read(ref Utf8JsonReader reader, System.Type typeToConvert, JsonSerializerOptions options)
-    {
-      if (reader.TokenType != JsonTokenType.StartObject)
-      {
-        throw new JsonException();
-      }
+    public override ServerPlayerResourceGathered ReadJson(JsonReader reader, System.Type objectType, ServerPlayerResourceGathered existingValue, bool hasExistingValue, JsonSerializer serializer)
+  {
+    JObject jo = JObject.Load(reader);
+    ServerPlayerResourceGathered value = new ServerPlayerResourceGathered();
 
-      var instance = new ServerPlayerResourceGathered();
-  
-      while (reader.Read())
-      {
-        if (reader.TokenType == JsonTokenType.EndObject)
-        {
-          return instance;
-        }
-
-        // Get the key.
-        if (reader.TokenType != JsonTokenType.PropertyName)
-        {
-          throw new JsonException();
-        }
-
-        string propertyName = reader.GetString();
-        if (propertyName == "gathered_timestamp")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.GatheredTimestamp = value;
-          continue;
-        }
-        if (propertyName == "steam_id")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.SteamId = value;
-          continue;
-        }
-        if (propertyName == "item_uid")
-        {
-          var value = JsonSerializer.Deserialize<int>(ref reader, options);
-          instance.ItemUid = value;
-          continue;
-        }
-        if (propertyName == "item_id")
-        {
-          var value = JsonSerializer.Deserialize<int>(ref reader, options);
-          instance.ItemId = value;
-          continue;
-        }
-        if (propertyName == "amount")
-        {
-          var value = JsonSerializer.Deserialize<int>(ref reader, options);
-          instance.Amount = value;
-          continue;
-        }
-        if (propertyName == "gathering_item")
-        {
-          var value = JsonSerializer.Deserialize<ActiveItem>(ref reader, options);
-          instance.GatheringItem = value;
-          continue;
-        }
-        if (propertyName == "gathering_position")
-        {
-          var value = JsonSerializer.Deserialize<PlayerPosition>(ref reader, options);
-          instance.GatheringPosition = value;
-          continue;
-        }
-
-    
-
-        if(instance.AdditionalProperties == null) { instance.AdditionalProperties = new Dictionary<string, dynamic>(); }
-        var deserializedValue = JsonSerializer.Deserialize<dynamic>(ref reader, options);
-        instance.AdditionalProperties.Add(propertyName, deserializedValue);
-        continue;
-      }
-  
-      throw new JsonException();
-    }
-    public override void Write(Utf8JsonWriter writer, ServerPlayerResourceGathered value, JsonSerializerOptions options)
-    {
-      if (value == null)
-      {
-        JsonSerializer.Serialize(writer, null, options);
-        return;
-      }
-      var properties = value.GetType().GetProperties().Where(prop => prop.Name != "AdditionalProperties");
-  
-      writer.WriteStartObject();
-
-      if(value.GatheredTimestamp != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("gathered_timestamp");
-        JsonSerializer.Serialize(writer, value.GatheredTimestamp, options);
-      }
-      if(value.SteamId != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("steam_id");
-        JsonSerializer.Serialize(writer, value.SteamId, options);
-      }
-      if(value.ItemUid != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("item_uid");
-        JsonSerializer.Serialize(writer, value.ItemUid, options);
-      }
-      if(value.ItemId != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("item_id");
-        JsonSerializer.Serialize(writer, value.ItemId, options);
-      }
-      if(value.Amount != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("amount");
-        JsonSerializer.Serialize(writer, value.Amount, options);
-      }
-      if(value.GatheringItem != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("gathering_item");
-        JsonSerializer.Serialize(writer, value.GatheringItem, options);
-      }
-      if(value.GatheringPosition != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("gathering_position");
-        JsonSerializer.Serialize(writer, value.GatheringPosition, options);
-      }
-
-
-  
-
-      // Unwrap additional properties in object
-      if (value.AdditionalProperties != null) {
-        foreach (var additionalProperty in value.AdditionalProperties)
-        {
-          //Ignore any additional properties which might already be part of the core properties
-          if (properties.Any(prop => prop.Name == additionalProperty.Key))
-          {
-              continue;
-          }
-          // write property name and let the serializer serialize the value itself
-          writer.WritePropertyName(additionalProperty.Key);
-          JsonSerializer.Serialize(writer, additionalProperty.Value, options);
-        }
-      }
-
-      writer.WriteEndObject();
-    }
-
+    if(jo["gathered_timestamp"] != null) {
+    value.GatheredTimestamp = jo["gathered_timestamp"].ToObject<string>(serializer);
+  }
+  if(jo["steam_id"] != null) {
+    value.SteamId = jo["steam_id"].ToObject<string>(serializer);
+  }
+  if(jo["item_uid"] != null) {
+    value.ItemUid = jo["item_uid"].ToObject<int>(serializer);
+  }
+  if(jo["item_id"] != null) {
+    value.ItemId = jo["item_id"].ToObject<int>(serializer);
+  }
+  if(jo["amount"] != null) {
+    value.Amount = jo["amount"].ToObject<int>(serializer);
+  }
+  if(jo["gathering_item"] != null) {
+    value.GatheringItem = jo["gathering_item"].ToObject<ActiveItem>(serializer);
+  }
+  if(jo["gathering_position"] != null) {
+    value.GatheringPosition = jo["gathering_position"].ToObject<PlayerPosition>(serializer);
   }
 
+    var additionalProperties = jo.Properties().Where((prop) => prop.Name != "gathered_timestamp" || prop.Name != "steam_id" || prop.Name != "item_uid" || prop.Name != "item_id" || prop.Name != "amount" || prop.Name != "gathering_item" || prop.Name != "gathering_position");
+    value.AdditionalProperties = new Dictionary<string, dynamic>();
+
+    foreach (var additionalProperty in additionalProperties)
+    {
+      value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<dynamic>(serializer);
+    }
+    return value;
+  }
+    public override void WriteJson(JsonWriter writer, ServerPlayerResourceGathered value, JsonSerializer serializer)
+  {
+    JObject jo = new JObject();
+
+    if (value.GatheredTimestamp != null)
+  {
+    jo.Add("gathered_timestamp", JToken.FromObject(value.GatheredTimestamp, serializer));
+  }
+  if (value.SteamId != null)
+  {
+    jo.Add("steam_id", JToken.FromObject(value.SteamId, serializer));
+  }
+  if (value.ItemUid != null)
+  {
+    jo.Add("item_uid", JToken.FromObject(value.ItemUid, serializer));
+  }
+  if (value.ItemId != null)
+  {
+    jo.Add("item_id", JToken.FromObject(value.ItemId, serializer));
+  }
+  if (value.Amount != null)
+  {
+    jo.Add("amount", JToken.FromObject(value.Amount, serializer));
+  }
+  if (value.GatheringItem != null)
+  {
+    jo.Add("gathering_item", JToken.FromObject(value.GatheringItem, serializer));
+  }
+  if (value.GatheringPosition != null)
+  {
+    jo.Add("gathering_position", JToken.FromObject(value.GatheringPosition, serializer));
+  }
+    if (value.AdditionalProperties != null)
+    {
+    foreach (var unwrapProperty in value.AdditionalProperties)
+    {
+      var hasProp = jo[unwrapProperty.Key]; 
+      if (hasProp != null) continue;
+      jo.Add(unwrapProperty.Key, JToken.FromObject(unwrapProperty.Value, serializer));
+    }
+  }
+
+    jo.WriteTo(writer);
+  }
+
+    public override bool CanRead => true;
+    public override bool CanWrite => true;
+  }
 }

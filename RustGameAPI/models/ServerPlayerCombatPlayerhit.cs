@@ -1,9 +1,8 @@
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using System.Text.Json;
-  using System.Text.Json.Serialization;
-  using System.Text.RegularExpressions;
+  using Newtonsoft.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(ServerPlayerCombatPlayerhitConverter))]
@@ -32,102 +31,55 @@ namespace Asyncapi.Nats.Client.Models
     }
   }
 
-  internal class ServerPlayerCombatPlayerhitConverter : JsonConverter<ServerPlayerCombatPlayerhit>
+  public class ServerPlayerCombatPlayerhitConverter : JsonConverter<ServerPlayerCombatPlayerhit>
   {
-    public override bool CanConvert(System.Type objectType)
-    {
-      // this converter can be applied to any type
-      return true;
-    }
-    public override ServerPlayerCombatPlayerhit Read(ref Utf8JsonReader reader, System.Type typeToConvert, JsonSerializerOptions options)
-    {
-      if (reader.TokenType != JsonTokenType.StartObject)
-      {
-        throw new JsonException();
-      }
+    public override ServerPlayerCombatPlayerhit ReadJson(JsonReader reader, System.Type objectType, ServerPlayerCombatPlayerhit existingValue, bool hasExistingValue, JsonSerializer serializer)
+  {
+    JObject jo = JObject.Load(reader);
+    ServerPlayerCombatPlayerhit value = new ServerPlayerCombatPlayerhit();
 
-      var instance = new ServerPlayerCombatPlayerhit();
-  
-      while (reader.Read())
-      {
-        if (reader.TokenType == JsonTokenType.EndObject)
-        {
-          return instance;
-        }
-
-        // Get the key.
-        if (reader.TokenType != JsonTokenType.PropertyName)
-        {
-          throw new JsonException();
-        }
-
-        string propertyName = reader.GetString();
-        if (propertyName == "hit_timestamp")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.HitTimestamp = value;
-          continue;
-        }
-        if (propertyName == "player_hit")
-        {
-          var value = JsonSerializer.Deserialize<PlayerOnPlayerHit>(ref reader, options);
-          instance.PlayerHit = value;
-          continue;
-        }
-
-    
-
-        if(instance.AdditionalProperties == null) { instance.AdditionalProperties = new Dictionary<string, dynamic>(); }
-        var deserializedValue = JsonSerializer.Deserialize<dynamic>(ref reader, options);
-        instance.AdditionalProperties.Add(propertyName, deserializedValue);
-        continue;
-      }
-  
-      throw new JsonException();
-    }
-    public override void Write(Utf8JsonWriter writer, ServerPlayerCombatPlayerhit value, JsonSerializerOptions options)
-    {
-      if (value == null)
-      {
-        JsonSerializer.Serialize(writer, null, options);
-        return;
-      }
-      var properties = value.GetType().GetProperties().Where(prop => prop.Name != "AdditionalProperties");
-  
-      writer.WriteStartObject();
-
-      if(value.HitTimestamp != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("hit_timestamp");
-        JsonSerializer.Serialize(writer, value.HitTimestamp, options);
-      }
-      if(value.PlayerHit != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("player_hit");
-        JsonSerializer.Serialize(writer, value.PlayerHit, options);
-      }
-
-
-  
-
-      // Unwrap additional properties in object
-      if (value.AdditionalProperties != null) {
-        foreach (var additionalProperty in value.AdditionalProperties)
-        {
-          //Ignore any additional properties which might already be part of the core properties
-          if (properties.Any(prop => prop.Name == additionalProperty.Key))
-          {
-              continue;
-          }
-          // write property name and let the serializer serialize the value itself
-          writer.WritePropertyName(additionalProperty.Key);
-          JsonSerializer.Serialize(writer, additionalProperty.Value, options);
-        }
-      }
-
-      writer.WriteEndObject();
-    }
-
+    if(jo["hit_timestamp"] != null) {
+    value.HitTimestamp = jo["hit_timestamp"].ToObject<string>(serializer);
+  }
+  if(jo["player_hit"] != null) {
+    value.PlayerHit = jo["player_hit"].ToObject<PlayerOnPlayerHit>(serializer);
   }
 
+    var additionalProperties = jo.Properties().Where((prop) => prop.Name != "hit_timestamp" || prop.Name != "player_hit");
+    value.AdditionalProperties = new Dictionary<string, dynamic>();
+
+    foreach (var additionalProperty in additionalProperties)
+    {
+      value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<dynamic>(serializer);
+    }
+    return value;
+  }
+    public override void WriteJson(JsonWriter writer, ServerPlayerCombatPlayerhit value, JsonSerializer serializer)
+  {
+    JObject jo = new JObject();
+
+    if (value.HitTimestamp != null)
+  {
+    jo.Add("hit_timestamp", JToken.FromObject(value.HitTimestamp, serializer));
+  }
+  if (value.PlayerHit != null)
+  {
+    jo.Add("player_hit", JToken.FromObject(value.PlayerHit, serializer));
+  }
+    if (value.AdditionalProperties != null)
+    {
+    foreach (var unwrapProperty in value.AdditionalProperties)
+    {
+      var hasProp = jo[unwrapProperty.Key]; 
+      if (hasProp != null) continue;
+      jo.Add(unwrapProperty.Key, JToken.FromObject(unwrapProperty.Value, serializer));
+    }
+  }
+
+    jo.WriteTo(writer);
+  }
+
+    public override bool CanRead => true;
+    public override bool CanWrite => true;
+  }
 }

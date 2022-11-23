@@ -1,9 +1,8 @@
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using System.Text.Json;
-  using System.Text.Json.Serialization;
-  using System.Text.RegularExpressions;
+  using Newtonsoft.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(PlayerPositionConverter))]
@@ -39,113 +38,62 @@ namespace Asyncapi.Nats.Client.Models
     }
   }
 
-  internal class PlayerPositionConverter : JsonConverter<PlayerPosition>
+  public class PlayerPositionConverter : JsonConverter<PlayerPosition>
   {
-    public override bool CanConvert(System.Type objectType)
-    {
-      // this converter can be applied to any type
-      return true;
-    }
-    public override PlayerPosition Read(ref Utf8JsonReader reader, System.Type typeToConvert, JsonSerializerOptions options)
-    {
-      if (reader.TokenType != JsonTokenType.StartObject)
-      {
-        throw new JsonException();
-      }
+    public override PlayerPosition ReadJson(JsonReader reader, System.Type objectType, PlayerPosition existingValue, bool hasExistingValue, JsonSerializer serializer)
+  {
+    JObject jo = JObject.Load(reader);
+    PlayerPosition value = new PlayerPosition();
 
-      var instance = new PlayerPosition();
-  
-      while (reader.Read())
-      {
-        if (reader.TokenType == JsonTokenType.EndObject)
-        {
-          return instance;
-        }
-
-        // Get the key.
-        if (reader.TokenType != JsonTokenType.PropertyName)
-        {
-          throw new JsonException();
-        }
-
-        string propertyName = reader.GetString();
-        if (propertyName == "x")
-        {
-          var value = JsonSerializer.Deserialize<double>(ref reader, options);
-          instance.X = value;
-          continue;
-        }
-        if (propertyName == "y")
-        {
-          var value = JsonSerializer.Deserialize<double>(ref reader, options);
-          instance.Y = value;
-          continue;
-        }
-        if (propertyName == "z")
-        {
-          var value = JsonSerializer.Deserialize<double>(ref reader, options);
-          instance.Z = value;
-          continue;
-        }
-
-    
-
-        if(instance.AdditionalProperties == null) { instance.AdditionalProperties = new Dictionary<string, dynamic>(); }
-        var deserializedValue = JsonSerializer.Deserialize<dynamic>(ref reader, options);
-        instance.AdditionalProperties.Add(propertyName, deserializedValue);
-        continue;
-      }
-  
-      throw new JsonException();
-    }
-    public override void Write(Utf8JsonWriter writer, PlayerPosition value, JsonSerializerOptions options)
-    {
-      if (value == null)
-      {
-        JsonSerializer.Serialize(writer, null, options);
-        return;
-      }
-      var properties = value.GetType().GetProperties().Where(prop => prop.Name != "AdditionalProperties");
-  
-      writer.WriteStartObject();
-
-      if(value.X != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("x");
-        JsonSerializer.Serialize(writer, value.X, options);
-      }
-      if(value.Y != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("y");
-        JsonSerializer.Serialize(writer, value.Y, options);
-      }
-      if(value.Z != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("z");
-        JsonSerializer.Serialize(writer, value.Z, options);
-      }
-
-
-  
-
-      // Unwrap additional properties in object
-      if (value.AdditionalProperties != null) {
-        foreach (var additionalProperty in value.AdditionalProperties)
-        {
-          //Ignore any additional properties which might already be part of the core properties
-          if (properties.Any(prop => prop.Name == additionalProperty.Key))
-          {
-              continue;
-          }
-          // write property name and let the serializer serialize the value itself
-          writer.WritePropertyName(additionalProperty.Key);
-          JsonSerializer.Serialize(writer, additionalProperty.Value, options);
-        }
-      }
-
-      writer.WriteEndObject();
-    }
-
+    if(jo["x"] != null) {
+    value.X = jo["x"].ToObject<double>(serializer);
+  }
+  if(jo["y"] != null) {
+    value.Y = jo["y"].ToObject<double>(serializer);
+  }
+  if(jo["z"] != null) {
+    value.Z = jo["z"].ToObject<double>(serializer);
   }
 
+    var additionalProperties = jo.Properties().Where((prop) => prop.Name != "x" || prop.Name != "y" || prop.Name != "z");
+    value.AdditionalProperties = new Dictionary<string, dynamic>();
+
+    foreach (var additionalProperty in additionalProperties)
+    {
+      value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<dynamic>(serializer);
+    }
+    return value;
+  }
+    public override void WriteJson(JsonWriter writer, PlayerPosition value, JsonSerializer serializer)
+  {
+    JObject jo = new JObject();
+
+    if (value.X != null)
+  {
+    jo.Add("x", JToken.FromObject(value.X, serializer));
+  }
+  if (value.Y != null)
+  {
+    jo.Add("y", JToken.FromObject(value.Y, serializer));
+  }
+  if (value.Z != null)
+  {
+    jo.Add("z", JToken.FromObject(value.Z, serializer));
+  }
+    if (value.AdditionalProperties != null)
+    {
+    foreach (var unwrapProperty in value.AdditionalProperties)
+    {
+      var hasProp = jo[unwrapProperty.Key]; 
+      if (hasProp != null) continue;
+      jo.Add(unwrapProperty.Key, JToken.FromObject(unwrapProperty.Value, serializer));
+    }
+  }
+
+    jo.WriteTo(writer);
+  }
+
+    public override bool CanRead => true;
+    public override bool CanWrite => true;
+  }
 }

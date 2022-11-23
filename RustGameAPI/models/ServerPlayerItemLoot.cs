@@ -1,9 +1,8 @@
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using System.Text.Json;
-  using System.Text.Json.Serialization;
-  using System.Text.RegularExpressions;
+  using Newtonsoft.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(ServerPlayerItemLootConverter))]
@@ -74,168 +73,97 @@ namespace Asyncapi.Nats.Client.Models
     }
   }
 
-  internal class ServerPlayerItemLootConverter : JsonConverter<ServerPlayerItemLoot>
+  public class ServerPlayerItemLootConverter : JsonConverter<ServerPlayerItemLoot>
   {
-    public override bool CanConvert(System.Type objectType)
-    {
-      // this converter can be applied to any type
-      return true;
-    }
-    public override ServerPlayerItemLoot Read(ref Utf8JsonReader reader, System.Type typeToConvert, JsonSerializerOptions options)
-    {
-      if (reader.TokenType != JsonTokenType.StartObject)
-      {
-        throw new JsonException();
-      }
+    public override ServerPlayerItemLoot ReadJson(JsonReader reader, System.Type objectType, ServerPlayerItemLoot existingValue, bool hasExistingValue, JsonSerializer serializer)
+  {
+    JObject jo = JObject.Load(reader);
+    ServerPlayerItemLoot value = new ServerPlayerItemLoot();
 
-      var instance = new ServerPlayerItemLoot();
-  
-      while (reader.Read())
-      {
-        if (reader.TokenType == JsonTokenType.EndObject)
-        {
-          return instance;
-        }
-
-        // Get the key.
-        if (reader.TokenType != JsonTokenType.PropertyName)
-        {
-          throw new JsonException();
-        }
-
-        string propertyName = reader.GetString();
-        if (propertyName == "loot_timestamp")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.LootTimestamp = value;
-          continue;
-        }
-        if (propertyName == "steam_id")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.SteamId = value;
-          continue;
-        }
-        if (propertyName == "item_uid")
-        {
-          var value = JsonSerializer.Deserialize<int>(ref reader, options);
-          instance.ItemUid = value;
-          continue;
-        }
-        if (propertyName == "item_id")
-        {
-          var value = JsonSerializer.Deserialize<int>(ref reader, options);
-          instance.ItemId = value;
-          continue;
-        }
-        if (propertyName == "container_uid")
-        {
-          var value = JsonSerializer.Deserialize<int>(ref reader, options);
-          instance.ContainerUid = value;
-          continue;
-        }
-        if (propertyName == "container_prefab")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.ContainerPrefab = value;
-          continue;
-        }
-        if (propertyName == "container_position")
-        {
-          var value = JsonSerializer.Deserialize<PlayerPosition>(ref reader, options);
-          instance.ContainerPosition = value;
-          continue;
-        }
-        if (propertyName == "amount")
-        {
-          var value = JsonSerializer.Deserialize<int>(ref reader, options);
-          instance.Amount = value;
-          continue;
-        }
-
-    
-
-        if(instance.AdditionalProperties == null) { instance.AdditionalProperties = new Dictionary<string, dynamic>(); }
-        var deserializedValue = JsonSerializer.Deserialize<dynamic>(ref reader, options);
-        instance.AdditionalProperties.Add(propertyName, deserializedValue);
-        continue;
-      }
-  
-      throw new JsonException();
-    }
-    public override void Write(Utf8JsonWriter writer, ServerPlayerItemLoot value, JsonSerializerOptions options)
-    {
-      if (value == null)
-      {
-        JsonSerializer.Serialize(writer, null, options);
-        return;
-      }
-      var properties = value.GetType().GetProperties().Where(prop => prop.Name != "AdditionalProperties");
-  
-      writer.WriteStartObject();
-
-      if(value.LootTimestamp != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("loot_timestamp");
-        JsonSerializer.Serialize(writer, value.LootTimestamp, options);
-      }
-      if(value.SteamId != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("steam_id");
-        JsonSerializer.Serialize(writer, value.SteamId, options);
-      }
-      if(value.ItemUid != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("item_uid");
-        JsonSerializer.Serialize(writer, value.ItemUid, options);
-      }
-      if(value.ItemId != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("item_id");
-        JsonSerializer.Serialize(writer, value.ItemId, options);
-      }
-      if(value.ContainerUid != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("container_uid");
-        JsonSerializer.Serialize(writer, value.ContainerUid, options);
-      }
-      if(value.ContainerPrefab != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("container_prefab");
-        JsonSerializer.Serialize(writer, value.ContainerPrefab, options);
-      }
-      if(value.ContainerPosition != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("container_position");
-        JsonSerializer.Serialize(writer, value.ContainerPosition, options);
-      }
-      if(value.Amount != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("amount");
-        JsonSerializer.Serialize(writer, value.Amount, options);
-      }
-
-
-  
-
-      // Unwrap additional properties in object
-      if (value.AdditionalProperties != null) {
-        foreach (var additionalProperty in value.AdditionalProperties)
-        {
-          //Ignore any additional properties which might already be part of the core properties
-          if (properties.Any(prop => prop.Name == additionalProperty.Key))
-          {
-              continue;
-          }
-          // write property name and let the serializer serialize the value itself
-          writer.WritePropertyName(additionalProperty.Key);
-          JsonSerializer.Serialize(writer, additionalProperty.Value, options);
-        }
-      }
-
-      writer.WriteEndObject();
-    }
-
+    if(jo["loot_timestamp"] != null) {
+    value.LootTimestamp = jo["loot_timestamp"].ToObject<string>(serializer);
+  }
+  if(jo["steam_id"] != null) {
+    value.SteamId = jo["steam_id"].ToObject<string>(serializer);
+  }
+  if(jo["item_uid"] != null) {
+    value.ItemUid = jo["item_uid"].ToObject<int>(serializer);
+  }
+  if(jo["item_id"] != null) {
+    value.ItemId = jo["item_id"].ToObject<int>(serializer);
+  }
+  if(jo["container_uid"] != null) {
+    value.ContainerUid = jo["container_uid"].ToObject<int>(serializer);
+  }
+  if(jo["container_prefab"] != null) {
+    value.ContainerPrefab = jo["container_prefab"].ToObject<string>(serializer);
+  }
+  if(jo["container_position"] != null) {
+    value.ContainerPosition = jo["container_position"].ToObject<PlayerPosition>(serializer);
+  }
+  if(jo["amount"] != null) {
+    value.Amount = jo["amount"].ToObject<int>(serializer);
   }
 
+    var additionalProperties = jo.Properties().Where((prop) => prop.Name != "loot_timestamp" || prop.Name != "steam_id" || prop.Name != "item_uid" || prop.Name != "item_id" || prop.Name != "container_uid" || prop.Name != "container_prefab" || prop.Name != "container_position" || prop.Name != "amount");
+    value.AdditionalProperties = new Dictionary<string, dynamic>();
+
+    foreach (var additionalProperty in additionalProperties)
+    {
+      value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<dynamic>(serializer);
+    }
+    return value;
+  }
+    public override void WriteJson(JsonWriter writer, ServerPlayerItemLoot value, JsonSerializer serializer)
+  {
+    JObject jo = new JObject();
+
+    if (value.LootTimestamp != null)
+  {
+    jo.Add("loot_timestamp", JToken.FromObject(value.LootTimestamp, serializer));
+  }
+  if (value.SteamId != null)
+  {
+    jo.Add("steam_id", JToken.FromObject(value.SteamId, serializer));
+  }
+  if (value.ItemUid != null)
+  {
+    jo.Add("item_uid", JToken.FromObject(value.ItemUid, serializer));
+  }
+  if (value.ItemId != null)
+  {
+    jo.Add("item_id", JToken.FromObject(value.ItemId, serializer));
+  }
+  if (value.ContainerUid != null)
+  {
+    jo.Add("container_uid", JToken.FromObject(value.ContainerUid, serializer));
+  }
+  if (value.ContainerPrefab != null)
+  {
+    jo.Add("container_prefab", JToken.FromObject(value.ContainerPrefab, serializer));
+  }
+  if (value.ContainerPosition != null)
+  {
+    jo.Add("container_position", JToken.FromObject(value.ContainerPosition, serializer));
+  }
+  if (value.Amount != null)
+  {
+    jo.Add("amount", JToken.FromObject(value.Amount, serializer));
+  }
+    if (value.AdditionalProperties != null)
+    {
+    foreach (var unwrapProperty in value.AdditionalProperties)
+    {
+      var hasProp = jo[unwrapProperty.Key]; 
+      if (hasProp != null) continue;
+      jo.Add(unwrapProperty.Key, JToken.FromObject(unwrapProperty.Value, serializer));
+    }
+  }
+
+    jo.WriteTo(writer);
+  }
+
+    public override bool CanRead => true;
+    public override bool CanWrite => true;
+  }
 }

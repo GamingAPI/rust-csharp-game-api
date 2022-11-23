@@ -1,9 +1,8 @@
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using System.Text.Json;
-  using System.Text.Json.Serialization;
-  using System.Text.RegularExpressions;
+  using Newtonsoft.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(PlayerHitConverter))]
@@ -39,113 +38,62 @@ namespace Asyncapi.Nats.Client.Models
     }
   }
 
-  internal class PlayerHitConverter : JsonConverter<PlayerHit>
+  public class PlayerHitConverter : JsonConverter<PlayerHit>
   {
-    public override bool CanConvert(System.Type objectType)
-    {
-      // this converter can be applied to any type
-      return true;
-    }
-    public override PlayerHit Read(ref Utf8JsonReader reader, System.Type typeToConvert, JsonSerializerOptions options)
-    {
-      if (reader.TokenType != JsonTokenType.StartObject)
-      {
-        throw new JsonException();
-      }
+    public override PlayerHit ReadJson(JsonReader reader, System.Type objectType, PlayerHit existingValue, bool hasExistingValue, JsonSerializer serializer)
+  {
+    JObject jo = JObject.Load(reader);
+    PlayerHit value = new PlayerHit();
 
-      var instance = new PlayerHit();
-  
-      while (reader.Read())
-      {
-        if (reader.TokenType == JsonTokenType.EndObject)
-        {
-          return instance;
-        }
-
-        // Get the key.
-        if (reader.TokenType != JsonTokenType.PropertyName)
-        {
-          throw new JsonException();
-        }
-
-        string propertyName = reader.GetString();
-        if (propertyName == "steam_id")
-        {
-          var value = JsonSerializer.Deserialize<string>(ref reader, options);
-          instance.SteamId = value;
-          continue;
-        }
-        if (propertyName == "position")
-        {
-          var value = JsonSerializer.Deserialize<PlayerPosition>(ref reader, options);
-          instance.Position = value;
-          continue;
-        }
-        if (propertyName == "active_item")
-        {
-          var value = JsonSerializer.Deserialize<ActiveItem>(ref reader, options);
-          instance.ActiveItem = value;
-          continue;
-        }
-
-    
-
-        if(instance.AdditionalProperties == null) { instance.AdditionalProperties = new Dictionary<string, dynamic>(); }
-        var deserializedValue = JsonSerializer.Deserialize<dynamic>(ref reader, options);
-        instance.AdditionalProperties.Add(propertyName, deserializedValue);
-        continue;
-      }
-  
-      throw new JsonException();
-    }
-    public override void Write(Utf8JsonWriter writer, PlayerHit value, JsonSerializerOptions options)
-    {
-      if (value == null)
-      {
-        JsonSerializer.Serialize(writer, null, options);
-        return;
-      }
-      var properties = value.GetType().GetProperties().Where(prop => prop.Name != "AdditionalProperties");
-  
-      writer.WriteStartObject();
-
-      if(value.SteamId != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("steam_id");
-        JsonSerializer.Serialize(writer, value.SteamId, options);
-      }
-      if(value.Position != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("position");
-        JsonSerializer.Serialize(writer, value.Position, options);
-      }
-      if(value.ActiveItem != null) { 
-        // write property name and let the serializer serialize the value itself
-        writer.WritePropertyName("active_item");
-        JsonSerializer.Serialize(writer, value.ActiveItem, options);
-      }
-
-
-  
-
-      // Unwrap additional properties in object
-      if (value.AdditionalProperties != null) {
-        foreach (var additionalProperty in value.AdditionalProperties)
-        {
-          //Ignore any additional properties which might already be part of the core properties
-          if (properties.Any(prop => prop.Name == additionalProperty.Key))
-          {
-              continue;
-          }
-          // write property name and let the serializer serialize the value itself
-          writer.WritePropertyName(additionalProperty.Key);
-          JsonSerializer.Serialize(writer, additionalProperty.Value, options);
-        }
-      }
-
-      writer.WriteEndObject();
-    }
-
+    if(jo["steam_id"] != null) {
+    value.SteamId = jo["steam_id"].ToObject<string>(serializer);
+  }
+  if(jo["position"] != null) {
+    value.Position = jo["position"].ToObject<PlayerPosition>(serializer);
+  }
+  if(jo["active_item"] != null) {
+    value.ActiveItem = jo["active_item"].ToObject<ActiveItem>(serializer);
   }
 
+    var additionalProperties = jo.Properties().Where((prop) => prop.Name != "steam_id" || prop.Name != "position" || prop.Name != "active_item");
+    value.AdditionalProperties = new Dictionary<string, dynamic>();
+
+    foreach (var additionalProperty in additionalProperties)
+    {
+      value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<dynamic>(serializer);
+    }
+    return value;
+  }
+    public override void WriteJson(JsonWriter writer, PlayerHit value, JsonSerializer serializer)
+  {
+    JObject jo = new JObject();
+
+    if (value.SteamId != null)
+  {
+    jo.Add("steam_id", JToken.FromObject(value.SteamId, serializer));
+  }
+  if (value.Position != null)
+  {
+    jo.Add("position", JToken.FromObject(value.Position, serializer));
+  }
+  if (value.ActiveItem != null)
+  {
+    jo.Add("active_item", JToken.FromObject(value.ActiveItem, serializer));
+  }
+    if (value.AdditionalProperties != null)
+    {
+    foreach (var unwrapProperty in value.AdditionalProperties)
+    {
+      var hasProp = jo[unwrapProperty.Key]; 
+      if (hasProp != null) continue;
+      jo.Add(unwrapProperty.Key, JToken.FromObject(unwrapProperty.Value, serializer));
+    }
+  }
+
+    jo.WriteTo(writer);
+  }
+
+    public override bool CanRead => true;
+    public override bool CanWrite => true;
+  }
 }
