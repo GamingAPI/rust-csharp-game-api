@@ -1,8 +1,9 @@
+extern alias NewtonsoftAlias;
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using Newtonsoft.Json;
-  using Newtonsoft.Json.Linq;
+  using NewtonsoftAlias::Newtonsoft.Json;
+  using NewtonsoftAlias::Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(ServerPlayerUnbannedConverter))]

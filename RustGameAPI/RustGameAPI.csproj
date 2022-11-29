@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net46;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
@@ -11,11 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="NATS.Client"/>
+    <None Remove="NATS.Client" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NATS.Client" Version="1.0.1"/>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>
+    <PackageReference Include="NATS.Client" Version="1.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2">
+      <Aliases>NewtonsoftAlias</Aliases>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
   </ItemGroup>
 </Project>
