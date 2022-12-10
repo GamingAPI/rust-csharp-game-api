@@ -1,9 +1,8 @@
-extern alias NewtonsoftAlias;
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using NewtonsoftAlias::Newtonsoft.Json;
-  using NewtonsoftAlias::Newtonsoft.Json.Linq;
+  using NewtonsoftAlias.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(PlayerOnPlayerHitConverter))]
@@ -15,7 +14,7 @@ namespace Asyncapi.Nats.Client.Models
     private bool isKill;
     private PlayerHit victim;
     private PlayerHit attacker;
-    private Dictionary<string, dynamic> additionalProperties;
+    private Dictionary<string, object> additionalProperties;
 
     public int HitAreaId 
     {
@@ -53,7 +52,7 @@ namespace Asyncapi.Nats.Client.Models
       set { attacker = value; }
     }
 
-    public Dictionary<string, dynamic> AdditionalProperties 
+    public Dictionary<string, object> AdditionalProperties 
     {
       get { return additionalProperties; }
       set { additionalProperties = value; }
@@ -87,11 +86,11 @@ namespace Asyncapi.Nats.Client.Models
   }
 
     var additionalProperties = jo.Properties().Where((prop) => prop.Name != "hit_area_id" || prop.Name != "hit_distance" || prop.Name != "hit_damage" || prop.Name != "isKill" || prop.Name != "victim" || prop.Name != "attacker");
-    value.AdditionalProperties = new Dictionary<string, dynamic>();
+    value.AdditionalProperties = new Dictionary<string, object>();
 
     foreach (var additionalProperty in additionalProperties)
     {
-      value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<dynamic>(serializer);
+      value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<object>(serializer);
     }
     return value;
   }
