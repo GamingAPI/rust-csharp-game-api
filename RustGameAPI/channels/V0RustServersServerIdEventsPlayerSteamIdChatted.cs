@@ -1,8 +1,7 @@
-extern alias NewtonsoftAlias;
 using NATS.Client;
 using System;
 using System.Text;
-using NewtonsoftAlias::Newtonsoft.Json;
+using NewtonsoftAlias.Json;
 using Asyncapi.Nats.Client.Models;
 using NATS.Client.JetStream;
 

@@ -1,16 +1,15 @@
-extern alias NewtonsoftAlias;
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using NewtonsoftAlias::Newtonsoft.Json;
-  using NewtonsoftAlias::Newtonsoft.Json.Linq;
+  using NewtonsoftAlias.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(ServerStartedConverter))]
   public class ServerStarted
   {
     private string timestamp;
-    private Dictionary<string, dynamic> additionalProperties;
+    private Dictionary<string, object> additionalProperties;
 
     public string Timestamp 
     {
@@ -18,7 +17,7 @@ namespace Asyncapi.Nats.Client.Models
       set { timestamp = value; }
     }
 
-    public Dictionary<string, dynamic> AdditionalProperties 
+    public Dictionary<string, object> AdditionalProperties 
     {
       get { return additionalProperties; }
       set { additionalProperties = value; }
@@ -37,11 +36,11 @@ namespace Asyncapi.Nats.Client.Models
   }
 
     var additionalProperties = jo.Properties().Where((prop) => prop.Name != "timestamp");
-    value.AdditionalProperties = new Dictionary<string, dynamic>();
+    value.AdditionalProperties = new Dictionary<string, object>();
 
     foreach (var additionalProperty in additionalProperties)
     {
-      value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<dynamic>(serializer);
+      value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<object>(serializer);
     }
     return value;
   }
