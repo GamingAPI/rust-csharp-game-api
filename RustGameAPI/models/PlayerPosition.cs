@@ -1,9 +1,8 @@
-extern alias NewtonsoftAlias;
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using NewtonsoftAlias::Newtonsoft.Json;
-  using NewtonsoftAlias::Newtonsoft.Json.Linq;
+  using NewtonsoftAlias.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(PlayerPositionConverter))]
@@ -12,7 +11,7 @@ namespace Asyncapi.Nats.Client.Models
     private double x;
     private double y;
     private double z;
-    private Dictionary<string, dynamic> additionalProperties;
+    private Dictionary<string, object> additionalProperties;
 
     public double X 
     {
@@ -32,7 +31,7 @@ namespace Asyncapi.Nats.Client.Models
       set { z = value; }
     }
 
-    public Dictionary<string, dynamic> AdditionalProperties 
+    public Dictionary<string, object> AdditionalProperties 
     {
       get { return additionalProperties; }
       set { additionalProperties = value; }
@@ -57,11 +56,11 @@ namespace Asyncapi.Nats.Client.Models
   }
 
     var additionalProperties = jo.Properties().Where((prop) => prop.Name != "x" || prop.Name != "y" || prop.Name != "z");
-    value.AdditionalProperties = new Dictionary<string, dynamic>();
+    value.AdditionalProperties = new Dictionary<string, object>();
 
     foreach (var additionalProperty in additionalProperties)
     {
-      value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<dynamic>(serializer);
+      value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<object>(serializer);
     }
     return value;
   }
