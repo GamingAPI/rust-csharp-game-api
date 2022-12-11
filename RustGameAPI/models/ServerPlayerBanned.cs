@@ -2,7 +2,7 @@ namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
   using NewtonsoftAlias.Json;
-  using Newtonsoft.Json.Linq;
+  using NewtonsoftAlias.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(ServerPlayerBannedConverter))]
