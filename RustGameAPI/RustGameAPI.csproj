@@ -4,11 +4,11 @@
   <PropertyGroup>
     <TargetFrameworks>net46;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
     <RootNamespace>Asyncapi.Nats.Client</RootNamespace>
-    <Version>0.14.0</Version>
+    <Version>0.15.0</Version>
     <RepositoryUrl>https://github.com/GamingAPI/rust-csharp-game-api.git</RepositoryUrl>
-    <PackageVersion>0.14.0</PackageVersion>
-    <AssemblyVersion>0.14.0.0</AssemblyVersion>
-    <FileVersion>0.14.0.0</FileVersion>
+    <PackageVersion>0.15.0</PackageVersion>
+    <AssemblyVersion>0.15.0.0</AssemblyVersion>
+    <FileVersion>0.15.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
