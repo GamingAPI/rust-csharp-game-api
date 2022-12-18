@@ -1,32 +1,32 @@
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using NewtonsoftAlias.Json;
-  using NewtonsoftAlias.Json.Linq;
+  using Newtonsoft.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(ServerCommandConverter))]
   public class ServerCommand
   {
-    private string command;
-    private string arguments;
-    private string steamId;
+    private string? command;
+    private string? arguments;
+    private string? steamId;
     private string timestamp;
-    private Dictionary<string, object> additionalProperties;
+    private Dictionary<string, object>? additionalProperties;
 
-    public string Command 
+    public string? Command 
     {
       get { return command; }
       set { command = value; }
     }
 
-    public string Arguments 
+    public string? Arguments 
     {
       get { return arguments; }
       set { arguments = value; }
     }
 
-    public string SteamId 
+    public string? SteamId 
     {
       get { return steamId; }
       set { steamId = value; }
@@ -38,46 +38,42 @@ namespace Asyncapi.Nats.Client.Models
       set { timestamp = value; }
     }
 
-    public Dictionary<string, object> AdditionalProperties 
+    public Dictionary<string, object>? AdditionalProperties 
     {
       get { return additionalProperties; }
       set { additionalProperties = value; }
     }
   }
-
-  public class ServerCommandConverter : JsonConverter<ServerCommand>
+  public class ServerCommandConverter : JsonConverter
   {
-    public override ServerCommand ReadJson(JsonReader reader, System.Type objectType, ServerCommand existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override object ReadJson(JsonReader reader, System.Type objectType, object existingValue, bool hasExistingValue, JsonSerializer serializer)
   {
     JObject jo = JObject.Load(reader);
     ServerCommand value = new ServerCommand();
-
     if(jo["command"] != null) {
-    value.Command = jo["command"].ToObject<string>(serializer);
+    value.Command = jo["command"].ToObject<string?>(serializer);
   }
   if(jo["arguments"] != null) {
-    value.Arguments = jo["arguments"].ToObject<string>(serializer);
+    value.Arguments = jo["arguments"].ToObject<string?>(serializer);
   }
   if(jo["steam_id"] != null) {
-    value.SteamId = jo["steam_id"].ToObject<string>(serializer);
+    value.SteamId = jo["steam_id"].ToObject<string?>(serializer);
   }
   if(jo["timestamp"] != null) {
     value.Timestamp = jo["timestamp"].ToObject<string>(serializer);
   }
-
     var additionalProperties = jo.Properties().Where((prop) => prop.Name != "command" || prop.Name != "arguments" || prop.Name != "steam_id" || prop.Name != "timestamp");
     value.AdditionalProperties = new Dictionary<string, object>();
-
     foreach (var additionalProperty in additionalProperties)
     {
       value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<object>(serializer);
     }
     return value;
   }
-    public override void WriteJson(JsonWriter writer, ServerCommand value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, object objValue, JsonSerializer serializer)
   {
+    ServerCommand value = (ServerCommand)objValue;
     JObject jo = new JObject();
-
     if (value.Command != null)
   {
     jo.Add("command", JToken.FromObject(value.Command, serializer));
@@ -103,11 +99,12 @@ namespace Asyncapi.Nats.Client.Models
       jo.Add(unwrapProperty.Key, JToken.FromObject(unwrapProperty.Value, serializer));
     }
   }
-
     jo.WriteTo(writer);
   }
-
-    public override bool CanRead => true;
-    public override bool CanWrite => true;
+  
+    public override bool CanConvert(Type objectType)
+    {
+      return true;
+    }
   }
 }

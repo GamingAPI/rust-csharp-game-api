@@ -1,8 +1,8 @@
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using NewtonsoftAlias.Json;
-  using NewtonsoftAlias.Json.Linq;
+  using Newtonsoft.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(ServerPlayerItemCraftedConverter))]
@@ -13,7 +13,7 @@ namespace Asyncapi.Nats.Client.Models
     private int itemUid;
     private int itemId;
     private int amount;
-    private Dictionary<string, object> additionalProperties;
+    private Dictionary<string, object>? additionalProperties;
 
     public string CraftTimestamp 
     {
@@ -45,20 +45,18 @@ namespace Asyncapi.Nats.Client.Models
       set { amount = value; }
     }
 
-    public Dictionary<string, object> AdditionalProperties 
+    public Dictionary<string, object>? AdditionalProperties 
     {
       get { return additionalProperties; }
       set { additionalProperties = value; }
     }
   }
-
-  public class ServerPlayerItemCraftedConverter : JsonConverter<ServerPlayerItemCrafted>
+  public class ServerPlayerItemCraftedConverter : JsonConverter
   {
-    public override ServerPlayerItemCrafted ReadJson(JsonReader reader, System.Type objectType, ServerPlayerItemCrafted existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override object ReadJson(JsonReader reader, System.Type objectType, object existingValue, bool hasExistingValue, JsonSerializer serializer)
   {
     JObject jo = JObject.Load(reader);
     ServerPlayerItemCrafted value = new ServerPlayerItemCrafted();
-
     if(jo["craft_timestamp"] != null) {
     value.CraftTimestamp = jo["craft_timestamp"].ToObject<string>(serializer);
   }
@@ -74,20 +72,18 @@ namespace Asyncapi.Nats.Client.Models
   if(jo["amount"] != null) {
     value.Amount = jo["amount"].ToObject<int>(serializer);
   }
-
     var additionalProperties = jo.Properties().Where((prop) => prop.Name != "craft_timestamp" || prop.Name != "steam_id" || prop.Name != "item_uid" || prop.Name != "item_id" || prop.Name != "amount");
     value.AdditionalProperties = new Dictionary<string, object>();
-
     foreach (var additionalProperty in additionalProperties)
     {
       value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<object>(serializer);
     }
     return value;
   }
-    public override void WriteJson(JsonWriter writer, ServerPlayerItemCrafted value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, object objValue, JsonSerializer serializer)
   {
+    ServerPlayerItemCrafted value = (ServerPlayerItemCrafted)objValue;
     JObject jo = new JObject();
-
     if (value.CraftTimestamp != null)
   {
     jo.Add("craft_timestamp", JToken.FromObject(value.CraftTimestamp, serializer));
@@ -117,11 +113,12 @@ namespace Asyncapi.Nats.Client.Models
       jo.Add(unwrapProperty.Key, JToken.FromObject(unwrapProperty.Value, serializer));
     }
   }
-
     jo.WriteTo(writer);
   }
-
-    public override bool CanRead => true;
-    public override bool CanWrite => true;
+  
+    public override bool CanConvert(Type objectType)
+    {
+      return true;
+    }
   }
 }

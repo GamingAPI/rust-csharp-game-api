@@ -1,8 +1,8 @@
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using NewtonsoftAlias.Json;
-  using NewtonsoftAlias.Json.Linq;
+  using Newtonsoft.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(ServerPlayerDisconnectedConverter))]
@@ -10,8 +10,8 @@ namespace Asyncapi.Nats.Client.Models
   {
     private string disconnectedTimestamp;
     private ServerPlayerDisconnectedPlayer player;
-    private string reason;
-    private Dictionary<string, object> additionalProperties;
+    private string? reason;
+    private Dictionary<string, object>? additionalProperties;
 
     public string DisconnectedTimestamp 
     {
@@ -25,26 +25,24 @@ namespace Asyncapi.Nats.Client.Models
       set { player = value; }
     }
 
-    public string Reason 
+    public string? Reason 
     {
       get { return reason; }
       set { reason = value; }
     }
 
-    public Dictionary<string, object> AdditionalProperties 
+    public Dictionary<string, object>? AdditionalProperties 
     {
       get { return additionalProperties; }
       set { additionalProperties = value; }
     }
   }
-
-  public class ServerPlayerDisconnectedConverter : JsonConverter<ServerPlayerDisconnected>
+  public class ServerPlayerDisconnectedConverter : JsonConverter
   {
-    public override ServerPlayerDisconnected ReadJson(JsonReader reader, System.Type objectType, ServerPlayerDisconnected existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override object ReadJson(JsonReader reader, System.Type objectType, object existingValue, bool hasExistingValue, JsonSerializer serializer)
   {
     JObject jo = JObject.Load(reader);
     ServerPlayerDisconnected value = new ServerPlayerDisconnected();
-
     if(jo["disconnected_timestamp"] != null) {
     value.DisconnectedTimestamp = jo["disconnected_timestamp"].ToObject<string>(serializer);
   }
@@ -52,22 +50,20 @@ namespace Asyncapi.Nats.Client.Models
     value.Player = jo["player"].ToObject<ServerPlayerDisconnectedPlayer>(serializer);
   }
   if(jo["reason"] != null) {
-    value.Reason = jo["reason"].ToObject<string>(serializer);
+    value.Reason = jo["reason"].ToObject<string?>(serializer);
   }
-
     var additionalProperties = jo.Properties().Where((prop) => prop.Name != "disconnected_timestamp" || prop.Name != "player" || prop.Name != "reason");
     value.AdditionalProperties = new Dictionary<string, object>();
-
     foreach (var additionalProperty in additionalProperties)
     {
       value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<object>(serializer);
     }
     return value;
   }
-    public override void WriteJson(JsonWriter writer, ServerPlayerDisconnected value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, object objValue, JsonSerializer serializer)
   {
+    ServerPlayerDisconnected value = (ServerPlayerDisconnected)objValue;
     JObject jo = new JObject();
-
     if (value.DisconnectedTimestamp != null)
   {
     jo.Add("disconnected_timestamp", JToken.FromObject(value.DisconnectedTimestamp, serializer));
@@ -89,11 +85,12 @@ namespace Asyncapi.Nats.Client.Models
       jo.Add(unwrapProperty.Key, JToken.FromObject(unwrapProperty.Value, serializer));
     }
   }
-
     jo.WriteTo(writer);
   }
-
-    public override bool CanRead => true;
-    public override bool CanWrite => true;
+  
+    public override bool CanConvert(Type objectType)
+    {
+      return true;
+    }
   }
 }

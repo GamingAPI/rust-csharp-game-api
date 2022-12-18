@@ -1,8 +1,8 @@
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using NewtonsoftAlias.Json;
-  using NewtonsoftAlias.Json.Linq;
+  using Newtonsoft.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(ServerPlayerReportedConverter))]
@@ -10,11 +10,11 @@ namespace Asyncapi.Nats.Client.Models
   {
     private string reporterSteamId;
     private string reportedTargetSteamId;
-    private string subject;
-    private string message;
-    private string reportedType;
+    private string? subject;
+    private string? message;
+    private string? reportedType;
     private string timestamp;
-    private Dictionary<string, object> additionalProperties;
+    private Dictionary<string, object>? additionalProperties;
 
     public string ReporterSteamId 
     {
@@ -28,19 +28,19 @@ namespace Asyncapi.Nats.Client.Models
       set { reportedTargetSteamId = value; }
     }
 
-    public string Subject 
+    public string? Subject 
     {
       get { return subject; }
       set { subject = value; }
     }
 
-    public string Message 
+    public string? Message 
     {
       get { return message; }
       set { message = value; }
     }
 
-    public string ReportedType 
+    public string? ReportedType 
     {
       get { return reportedType; }
       set { reportedType = value; }
@@ -52,20 +52,18 @@ namespace Asyncapi.Nats.Client.Models
       set { timestamp = value; }
     }
 
-    public Dictionary<string, object> AdditionalProperties 
+    public Dictionary<string, object>? AdditionalProperties 
     {
       get { return additionalProperties; }
       set { additionalProperties = value; }
     }
   }
-
-  public class ServerPlayerReportedConverter : JsonConverter<ServerPlayerReported>
+  public class ServerPlayerReportedConverter : JsonConverter
   {
-    public override ServerPlayerReported ReadJson(JsonReader reader, System.Type objectType, ServerPlayerReported existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override object ReadJson(JsonReader reader, System.Type objectType, object existingValue, bool hasExistingValue, JsonSerializer serializer)
   {
     JObject jo = JObject.Load(reader);
     ServerPlayerReported value = new ServerPlayerReported();
-
     if(jo["reporter_steam_id"] != null) {
     value.ReporterSteamId = jo["reporter_steam_id"].ToObject<string>(serializer);
   }
@@ -73,31 +71,29 @@ namespace Asyncapi.Nats.Client.Models
     value.ReportedTargetSteamId = jo["reported_target_steam_id"].ToObject<string>(serializer);
   }
   if(jo["subject"] != null) {
-    value.Subject = jo["subject"].ToObject<string>(serializer);
+    value.Subject = jo["subject"].ToObject<string?>(serializer);
   }
   if(jo["message"] != null) {
-    value.Message = jo["message"].ToObject<string>(serializer);
+    value.Message = jo["message"].ToObject<string?>(serializer);
   }
   if(jo["reportedType"] != null) {
-    value.ReportedType = jo["reportedType"].ToObject<string>(serializer);
+    value.ReportedType = jo["reportedType"].ToObject<string?>(serializer);
   }
   if(jo["timestamp"] != null) {
     value.Timestamp = jo["timestamp"].ToObject<string>(serializer);
   }
-
     var additionalProperties = jo.Properties().Where((prop) => prop.Name != "reporter_steam_id" || prop.Name != "reported_target_steam_id" || prop.Name != "subject" || prop.Name != "message" || prop.Name != "reportedType" || prop.Name != "timestamp");
     value.AdditionalProperties = new Dictionary<string, object>();
-
     foreach (var additionalProperty in additionalProperties)
     {
       value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<object>(serializer);
     }
     return value;
   }
-    public override void WriteJson(JsonWriter writer, ServerPlayerReported value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, object objValue, JsonSerializer serializer)
   {
+    ServerPlayerReported value = (ServerPlayerReported)objValue;
     JObject jo = new JObject();
-
     if (value.ReporterSteamId != null)
   {
     jo.Add("reporter_steam_id", JToken.FromObject(value.ReporterSteamId, serializer));
@@ -131,11 +127,12 @@ namespace Asyncapi.Nats.Client.Models
       jo.Add(unwrapProperty.Key, JToken.FromObject(unwrapProperty.Value, serializer));
     }
   }
-
     jo.WriteTo(writer);
   }
-
-    public override bool CanRead => true;
-    public override bool CanWrite => true;
+  
+    public override bool CanConvert(Type objectType)
+    {
+      return true;
+    }
   }
 }

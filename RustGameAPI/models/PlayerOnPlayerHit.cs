@@ -1,8 +1,8 @@
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using NewtonsoftAlias.Json;
-  using NewtonsoftAlias.Json.Linq;
+  using Newtonsoft.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(PlayerOnPlayerHitConverter))]
@@ -14,7 +14,7 @@ namespace Asyncapi.Nats.Client.Models
     private bool isKill;
     private PlayerHit victim;
     private PlayerHit attacker;
-    private Dictionary<string, object> additionalProperties;
+    private Dictionary<string, object>? additionalProperties;
 
     public int HitAreaId 
     {
@@ -52,20 +52,18 @@ namespace Asyncapi.Nats.Client.Models
       set { attacker = value; }
     }
 
-    public Dictionary<string, object> AdditionalProperties 
+    public Dictionary<string, object>? AdditionalProperties 
     {
       get { return additionalProperties; }
       set { additionalProperties = value; }
     }
   }
-
-  public class PlayerOnPlayerHitConverter : JsonConverter<PlayerOnPlayerHit>
+  public class PlayerOnPlayerHitConverter : JsonConverter
   {
-    public override PlayerOnPlayerHit ReadJson(JsonReader reader, System.Type objectType, PlayerOnPlayerHit existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override object ReadJson(JsonReader reader, System.Type objectType, object existingValue, bool hasExistingValue, JsonSerializer serializer)
   {
     JObject jo = JObject.Load(reader);
     PlayerOnPlayerHit value = new PlayerOnPlayerHit();
-
     if(jo["hit_area_id"] != null) {
     value.HitAreaId = jo["hit_area_id"].ToObject<int>(serializer);
   }
@@ -84,20 +82,18 @@ namespace Asyncapi.Nats.Client.Models
   if(jo["attacker"] != null) {
     value.Attacker = jo["attacker"].ToObject<PlayerHit>(serializer);
   }
-
     var additionalProperties = jo.Properties().Where((prop) => prop.Name != "hit_area_id" || prop.Name != "hit_distance" || prop.Name != "hit_damage" || prop.Name != "isKill" || prop.Name != "victim" || prop.Name != "attacker");
     value.AdditionalProperties = new Dictionary<string, object>();
-
     foreach (var additionalProperty in additionalProperties)
     {
       value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<object>(serializer);
     }
     return value;
   }
-    public override void WriteJson(JsonWriter writer, PlayerOnPlayerHit value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, object objValue, JsonSerializer serializer)
   {
+    PlayerOnPlayerHit value = (PlayerOnPlayerHit)objValue;
     JObject jo = new JObject();
-
     if (value.HitAreaId != null)
   {
     jo.Add("hit_area_id", JToken.FromObject(value.HitAreaId, serializer));
@@ -131,11 +127,12 @@ namespace Asyncapi.Nats.Client.Models
       jo.Add(unwrapProperty.Key, JToken.FromObject(unwrapProperty.Value, serializer));
     }
   }
-
     jo.WriteTo(writer);
   }
-
-    public override bool CanRead => true;
-    public override bool CanWrite => true;
+  
+    public override bool CanConvert(Type objectType)
+    {
+      return true;
+    }
   }
 }
