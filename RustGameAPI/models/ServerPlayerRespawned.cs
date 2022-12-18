@@ -88,7 +88,7 @@ namespace Asyncapi.Nats.Client.Models
     jo.WriteTo(writer);
   }
   
-    public override bool CanConvert(Type objectType)
+    public override bool CanConvert(System.Type objectType)
     {
       return true;
     }

@@ -1,7 +1,7 @@
 using NATS.Client;
 using System;
 using System.Text;
-using NewtonsoftAlias.Json;
+using Newtonsoft.Json;
 using Asyncapi.Nats.Client.Models;
 using NATS.Client.JetStream;
 
