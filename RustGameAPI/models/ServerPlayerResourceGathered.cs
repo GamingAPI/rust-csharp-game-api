@@ -1,8 +1,8 @@
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using NewtonsoftAlias.Json;
-  using NewtonsoftAlias.Json.Linq;
+  using Newtonsoft.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(ServerPlayerResourceGatheredConverter))]
@@ -14,8 +14,8 @@ namespace Asyncapi.Nats.Client.Models
     private int itemId;
     private int amount;
     private ActiveItem gatheringItem;
-    private PlayerPosition gatheringPosition;
-    private Dictionary<string, object> additionalProperties;
+    private PlayerPosition? gatheringPosition;
+    private Dictionary<string, object>? additionalProperties;
 
     public string GatheredTimestamp 
     {
@@ -53,26 +53,24 @@ namespace Asyncapi.Nats.Client.Models
       set { gatheringItem = value; }
     }
 
-    public PlayerPosition GatheringPosition 
+    public PlayerPosition? GatheringPosition 
     {
       get { return gatheringPosition; }
       set { gatheringPosition = value; }
     }
 
-    public Dictionary<string, object> AdditionalProperties 
+    public Dictionary<string, object>? AdditionalProperties 
     {
       get { return additionalProperties; }
       set { additionalProperties = value; }
     }
   }
-
-  public class ServerPlayerResourceGatheredConverter : JsonConverter<ServerPlayerResourceGathered>
+  public class ServerPlayerResourceGatheredConverter : JsonConverter
   {
-    public override ServerPlayerResourceGathered ReadJson(JsonReader reader, System.Type objectType, ServerPlayerResourceGathered existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override object ReadJson(JsonReader reader, System.Type objectType, object existingValue, bool hasExistingValue, JsonSerializer serializer)
   {
     JObject jo = JObject.Load(reader);
     ServerPlayerResourceGathered value = new ServerPlayerResourceGathered();
-
     if(jo["gathered_timestamp"] != null) {
     value.GatheredTimestamp = jo["gathered_timestamp"].ToObject<string>(serializer);
   }
@@ -92,22 +90,20 @@ namespace Asyncapi.Nats.Client.Models
     value.GatheringItem = jo["gathering_item"].ToObject<ActiveItem>(serializer);
   }
   if(jo["gathering_position"] != null) {
-    value.GatheringPosition = jo["gathering_position"].ToObject<PlayerPosition>(serializer);
+    value.GatheringPosition = jo["gathering_position"].ToObject<PlayerPosition?>(serializer);
   }
-
     var additionalProperties = jo.Properties().Where((prop) => prop.Name != "gathered_timestamp" || prop.Name != "steam_id" || prop.Name != "item_uid" || prop.Name != "item_id" || prop.Name != "amount" || prop.Name != "gathering_item" || prop.Name != "gathering_position");
     value.AdditionalProperties = new Dictionary<string, object>();
-
     foreach (var additionalProperty in additionalProperties)
     {
       value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<object>(serializer);
     }
     return value;
   }
-    public override void WriteJson(JsonWriter writer, ServerPlayerResourceGathered value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, object objValue, JsonSerializer serializer)
   {
+    ServerPlayerResourceGathered value = (ServerPlayerResourceGathered)objValue;
     JObject jo = new JObject();
-
     if (value.GatheredTimestamp != null)
   {
     jo.Add("gathered_timestamp", JToken.FromObject(value.GatheredTimestamp, serializer));
@@ -145,11 +141,12 @@ namespace Asyncapi.Nats.Client.Models
       jo.Add(unwrapProperty.Key, JToken.FromObject(unwrapProperty.Value, serializer));
     }
   }
-
     jo.WriteTo(writer);
   }
-
-    public override bool CanRead => true;
-    public override bool CanWrite => true;
+  
+    public override bool CanConvert(Type objectType)
+    {
+      return true;
+    }
   }
 }

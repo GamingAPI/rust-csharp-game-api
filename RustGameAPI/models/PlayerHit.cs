@@ -1,8 +1,8 @@
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using NewtonsoftAlias.Json;
-  using NewtonsoftAlias.Json.Linq;
+  using Newtonsoft.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(PlayerHitConverter))]
@@ -11,7 +11,7 @@ namespace Asyncapi.Nats.Client.Models
     private string steamId;
     private PlayerPosition position;
     private ActiveItem activeItem;
-    private Dictionary<string, object> additionalProperties;
+    private Dictionary<string, object>? additionalProperties;
 
     public string SteamId 
     {
@@ -31,20 +31,18 @@ namespace Asyncapi.Nats.Client.Models
       set { activeItem = value; }
     }
 
-    public Dictionary<string, object> AdditionalProperties 
+    public Dictionary<string, object>? AdditionalProperties 
     {
       get { return additionalProperties; }
       set { additionalProperties = value; }
     }
   }
-
-  public class PlayerHitConverter : JsonConverter<PlayerHit>
+  public class PlayerHitConverter : JsonConverter
   {
-    public override PlayerHit ReadJson(JsonReader reader, System.Type objectType, PlayerHit existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override object ReadJson(JsonReader reader, System.Type objectType, object existingValue, bool hasExistingValue, JsonSerializer serializer)
   {
     JObject jo = JObject.Load(reader);
     PlayerHit value = new PlayerHit();
-
     if(jo["steam_id"] != null) {
     value.SteamId = jo["steam_id"].ToObject<string>(serializer);
   }
@@ -54,20 +52,18 @@ namespace Asyncapi.Nats.Client.Models
   if(jo["active_item"] != null) {
     value.ActiveItem = jo["active_item"].ToObject<ActiveItem>(serializer);
   }
-
     var additionalProperties = jo.Properties().Where((prop) => prop.Name != "steam_id" || prop.Name != "position" || prop.Name != "active_item");
     value.AdditionalProperties = new Dictionary<string, object>();
-
     foreach (var additionalProperty in additionalProperties)
     {
       value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<object>(serializer);
     }
     return value;
   }
-    public override void WriteJson(JsonWriter writer, PlayerHit value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, object objValue, JsonSerializer serializer)
   {
+    PlayerHit value = (PlayerHit)objValue;
     JObject jo = new JObject();
-
     if (value.SteamId != null)
   {
     jo.Add("steam_id", JToken.FromObject(value.SteamId, serializer));
@@ -89,11 +85,12 @@ namespace Asyncapi.Nats.Client.Models
       jo.Add(unwrapProperty.Key, JToken.FromObject(unwrapProperty.Value, serializer));
     }
   }
-
     jo.WriteTo(writer);
   }
-
-    public override bool CanRead => true;
-    public override bool CanWrite => true;
+  
+    public override bool CanConvert(Type objectType)
+    {
+      return true;
+    }
   }
 }

@@ -1,3 +1,4 @@
+
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
@@ -11,11 +12,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="NATS.Client"/>
+    <None Remove="NATS.Client" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NATS.Client" Version="1.0.1"/>
-    <Reference Include="NewtonsoftAlias.Json"> <HintPath>../NewtonsoftAlias.Json.dll</HintPath></Reference>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>
+    <PackageReference Include="NATS.Client" Version="1.0.1" />
+    <Reference Include="Newtonsoft.Json" Version="8.0.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
   </ItemGroup>
 </Project>

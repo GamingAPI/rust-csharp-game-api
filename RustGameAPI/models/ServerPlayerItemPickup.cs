@@ -1,8 +1,8 @@
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using NewtonsoftAlias.Json;
-  using NewtonsoftAlias.Json.Linq;
+  using Newtonsoft.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(ServerPlayerItemPickupConverter))]
@@ -12,8 +12,8 @@ namespace Asyncapi.Nats.Client.Models
     private string steamId;
     private int itemUid;
     private int itemId;
-    private int amount;
-    private Dictionary<string, object> additionalProperties;
+    private int? amount;
+    private Dictionary<string, object>? additionalProperties;
 
     public string PickupTimestamp 
     {
@@ -39,26 +39,24 @@ namespace Asyncapi.Nats.Client.Models
       set { itemId = value; }
     }
 
-    public int Amount 
+    public int? Amount 
     {
       get { return amount; }
       set { amount = value; }
     }
 
-    public Dictionary<string, object> AdditionalProperties 
+    public Dictionary<string, object>? AdditionalProperties 
     {
       get { return additionalProperties; }
       set { additionalProperties = value; }
     }
   }
-
-  public class ServerPlayerItemPickupConverter : JsonConverter<ServerPlayerItemPickup>
+  public class ServerPlayerItemPickupConverter : JsonConverter
   {
-    public override ServerPlayerItemPickup ReadJson(JsonReader reader, System.Type objectType, ServerPlayerItemPickup existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override object ReadJson(JsonReader reader, System.Type objectType, object existingValue, bool hasExistingValue, JsonSerializer serializer)
   {
     JObject jo = JObject.Load(reader);
     ServerPlayerItemPickup value = new ServerPlayerItemPickup();
-
     if(jo["pickup_timestamp"] != null) {
     value.PickupTimestamp = jo["pickup_timestamp"].ToObject<string>(serializer);
   }
@@ -72,22 +70,20 @@ namespace Asyncapi.Nats.Client.Models
     value.ItemId = jo["item_id"].ToObject<int>(serializer);
   }
   if(jo["amount"] != null) {
-    value.Amount = jo["amount"].ToObject<int>(serializer);
+    value.Amount = jo["amount"].ToObject<int?>(serializer);
   }
-
     var additionalProperties = jo.Properties().Where((prop) => prop.Name != "pickup_timestamp" || prop.Name != "steam_id" || prop.Name != "item_uid" || prop.Name != "item_id" || prop.Name != "amount");
     value.AdditionalProperties = new Dictionary<string, object>();
-
     foreach (var additionalProperty in additionalProperties)
     {
       value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<object>(serializer);
     }
     return value;
   }
-    public override void WriteJson(JsonWriter writer, ServerPlayerItemPickup value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, object objValue, JsonSerializer serializer)
   {
+    ServerPlayerItemPickup value = (ServerPlayerItemPickup)objValue;
     JObject jo = new JObject();
-
     if (value.PickupTimestamp != null)
   {
     jo.Add("pickup_timestamp", JToken.FromObject(value.PickupTimestamp, serializer));
@@ -117,11 +113,12 @@ namespace Asyncapi.Nats.Client.Models
       jo.Add(unwrapProperty.Key, JToken.FromObject(unwrapProperty.Value, serializer));
     }
   }
-
     jo.WriteTo(writer);
   }
-
-    public override bool CanRead => true;
-    public override bool CanWrite => true;
+  
+    public override bool CanConvert(Type objectType)
+    {
+      return true;
+    }
   }
 }

@@ -1,8 +1,8 @@
 namespace Asyncapi.Nats.Client.Models
 {
   using System.Collections.Generic;
-  using NewtonsoftAlias.Json;
-  using NewtonsoftAlias.Json.Linq;
+  using Newtonsoft.Json;
+  using Newtonsoft.Json.Linq;
   using System.Linq;
 
   [JsonConverter(typeof(ServerPlayerItemLootConverter))]
@@ -14,9 +14,9 @@ namespace Asyncapi.Nats.Client.Models
     private int itemId;
     private int containerUid;
     private string containerPrefab;
-    private PlayerPosition containerPosition;
+    private PlayerPosition? containerPosition;
     private int amount;
-    private Dictionary<string, object> additionalProperties;
+    private Dictionary<string, object>? additionalProperties;
 
     public string LootTimestamp 
     {
@@ -54,7 +54,7 @@ namespace Asyncapi.Nats.Client.Models
       set { containerPrefab = value; }
     }
 
-    public PlayerPosition ContainerPosition 
+    public PlayerPosition? ContainerPosition 
     {
       get { return containerPosition; }
       set { containerPosition = value; }
@@ -66,20 +66,18 @@ namespace Asyncapi.Nats.Client.Models
       set { amount = value; }
     }
 
-    public Dictionary<string, object> AdditionalProperties 
+    public Dictionary<string, object>? AdditionalProperties 
     {
       get { return additionalProperties; }
       set { additionalProperties = value; }
     }
   }
-
-  public class ServerPlayerItemLootConverter : JsonConverter<ServerPlayerItemLoot>
+  public class ServerPlayerItemLootConverter : JsonConverter
   {
-    public override ServerPlayerItemLoot ReadJson(JsonReader reader, System.Type objectType, ServerPlayerItemLoot existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override object ReadJson(JsonReader reader, System.Type objectType, object existingValue, bool hasExistingValue, JsonSerializer serializer)
   {
     JObject jo = JObject.Load(reader);
     ServerPlayerItemLoot value = new ServerPlayerItemLoot();
-
     if(jo["loot_timestamp"] != null) {
     value.LootTimestamp = jo["loot_timestamp"].ToObject<string>(serializer);
   }
@@ -99,25 +97,23 @@ namespace Asyncapi.Nats.Client.Models
     value.ContainerPrefab = jo["container_prefab"].ToObject<string>(serializer);
   }
   if(jo["container_position"] != null) {
-    value.ContainerPosition = jo["container_position"].ToObject<PlayerPosition>(serializer);
+    value.ContainerPosition = jo["container_position"].ToObject<PlayerPosition?>(serializer);
   }
   if(jo["amount"] != null) {
     value.Amount = jo["amount"].ToObject<int>(serializer);
   }
-
     var additionalProperties = jo.Properties().Where((prop) => prop.Name != "loot_timestamp" || prop.Name != "steam_id" || prop.Name != "item_uid" || prop.Name != "item_id" || prop.Name != "container_uid" || prop.Name != "container_prefab" || prop.Name != "container_position" || prop.Name != "amount");
     value.AdditionalProperties = new Dictionary<string, object>();
-
     foreach (var additionalProperty in additionalProperties)
     {
       value.AdditionalProperties[additionalProperty.Name] = additionalProperty.Value.ToObject<object>(serializer);
     }
     return value;
   }
-    public override void WriteJson(JsonWriter writer, ServerPlayerItemLoot value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, object objValue, JsonSerializer serializer)
   {
+    ServerPlayerItemLoot value = (ServerPlayerItemLoot)objValue;
     JObject jo = new JObject();
-
     if (value.LootTimestamp != null)
   {
     jo.Add("loot_timestamp", JToken.FromObject(value.LootTimestamp, serializer));
@@ -159,11 +155,12 @@ namespace Asyncapi.Nats.Client.Models
       jo.Add(unwrapProperty.Key, JToken.FromObject(unwrapProperty.Value, serializer));
     }
   }
-
     jo.WriteTo(writer);
   }
-
-    public override bool CanRead => true;
-    public override bool CanWrite => true;
+  
+    public override bool CanConvert(Type objectType)
+    {
+      return true;
+    }
   }
 }
