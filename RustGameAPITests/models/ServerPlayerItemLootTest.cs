@@ -1,6 +1,6 @@
 
 using Asyncapi.Nats.Client.Models;
-using NewtonsoftAlias.Json;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using Xunit;
 
