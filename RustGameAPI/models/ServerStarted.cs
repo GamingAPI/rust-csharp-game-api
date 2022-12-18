@@ -25,7 +25,7 @@ namespace Asyncapi.Nats.Client.Models
   }
   public class ServerStartedConverter : JsonConverter
   {
-    public override object ReadJson(JsonReader reader, System.Type objectType, object existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override object ReadJson(JsonReader reader, System.Type objectType, object existingValue, JsonSerializer serializer)
   {
     JObject jo = JObject.Load(reader);
     ServerStarted value = new ServerStarted();

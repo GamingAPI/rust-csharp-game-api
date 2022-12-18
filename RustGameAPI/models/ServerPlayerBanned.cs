@@ -53,7 +53,7 @@ namespace Asyncapi.Nats.Client.Models
   }
   public class ServerPlayerBannedConverter : JsonConverter
   {
-    public override object ReadJson(JsonReader reader, System.Type objectType, object existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override object ReadJson(JsonReader reader, System.Type objectType, object existingValue, JsonSerializer serializer)
   {
     JObject jo = JObject.Load(reader);
     ServerPlayerBanned value = new ServerPlayerBanned();

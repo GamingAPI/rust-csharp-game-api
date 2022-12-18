@@ -46,7 +46,7 @@ namespace Asyncapi.Nats.Client.Models
   }
   public class ServerCommandConverter : JsonConverter
   {
-    public override object ReadJson(JsonReader reader, System.Type objectType, object existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override object ReadJson(JsonReader reader, System.Type objectType, object existingValue, JsonSerializer serializer)
   {
     JObject jo = JObject.Load(reader);
     ServerCommand value = new ServerCommand();
