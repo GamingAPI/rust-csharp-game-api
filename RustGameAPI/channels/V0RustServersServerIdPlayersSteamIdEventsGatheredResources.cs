@@ -23,7 +23,7 @@ String server_id,String steam_id
 ){
   logger.Debug("Publishing to channel: " + $"v0.rust.servers.{server_id}.players.{steam_id}.events.gatheredResources");
   var serializedObject = JsonSerializerSupport(logger, requestMessage); 
-  connection.Publish("v0.rust.servers.{server_id}.players.{steam_id}.events.gatheredResources", serializedObject);
+  connection.Publish($"v0.rust.servers.{server_id}.players.{steam_id}.events.gatheredResources", serializedObject);
 }
 public static void JetStreamPublish(
   LoggingInterface logger,
@@ -33,7 +33,7 @@ String server_id,String steam_id
 ){
   logger.Debug("Publishing to jetstream channel: " + $"v0.rust.servers.{server_id}.players.{steam_id}.events.gatheredResources");
   var serializedObject = JsonSerializerSupport(logger, requestMessage); 
-  connection.Publish("v0.rust.servers.{server_id}.players.{steam_id}.events.gatheredResources", serializedObject);
+  connection.Publish($"v0.rust.servers.{server_id}.players.{steam_id}.events.gatheredResources", serializedObject);
 }
   }
 }
